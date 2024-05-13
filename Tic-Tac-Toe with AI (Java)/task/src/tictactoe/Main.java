@@ -1,15 +1,35 @@
 package tictactoe;
+import java.util.Arrays;
 import java.util.Scanner;
 
 class TicTacToe {
 
-    String[][] ticTacToe;
+    final int MATRIX_SIZE = 3;
+    protected String[][] ticTacToe = new String[MATRIX_SIZE][MATRIX_SIZE];
 
     public TicTacToe(String cells) {
-        for (int i = 0; i < cells.length(); i = i + 3) {
-            System.out.println(cells.substring(i, i + 3));
+        int charIndex = 0;
+
+        for (int i = 0; i < ticTacToe.length; i++) {
+            for (int j = 0; j < ticTacToe[i].length; j++) {
+                ticTacToe[i][j] = String.valueOf(cells.charAt(charIndex));
+                charIndex++;
+            }
         }
     }
+
+    public String[][] getTicTacToe() {
+        return this.ticTacToe;
+    }
+
+    public void printTicTacToe() {
+        System.out.println("---------");
+        for (String[] cell : ticTacToe) {
+            System.out.printf("| %s %s %s |\n", cell[0], cell[1], cell[2]);
+        }
+        System.out.println("---------");
+    }
+
 }
 
 public class Main {
@@ -19,5 +39,8 @@ public class Main {
         String cells = scanner.nextLine();
 
         TicTacToe ticTacToe = new TicTacToe(cells);
+        ticTacToe.printTicTacToe();
+
+        System.out.println("Enter the coordinates:");
     }
 }
