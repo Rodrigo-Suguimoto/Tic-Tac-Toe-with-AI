@@ -5,6 +5,8 @@ import java.util.Scanner;
 class TicTacToe {
 
     final int MATRIX_SIZE = 3;
+    protected int coordinate1;
+    protected int coordinate2;
     protected String[][] ticTacToe = new String[MATRIX_SIZE][MATRIX_SIZE];
 
     public TicTacToe(String cells) {
@@ -30,6 +32,20 @@ class TicTacToe {
         System.out.println("---------");
     }
 
+    public void placeCell(String coordinates) {
+        String[] coordinatesIntoArray = coordinates.split(" ");
+        validateCoordinates(coordinatesIntoArray);
+    }
+
+    private void validateCoordinates(String[] coordinates) {
+        try {
+            this.coordinate1 = Integer.parseInt(coordinates[0]);
+            this.coordinate2 = Integer.parseInt(coordinates[1]);
+        } catch (NumberFormatException e) {
+            System.out.println("You should enter numbers!");
+        }
+    }
+
 }
 
 public class Main {
@@ -42,5 +58,7 @@ public class Main {
         ticTacToe.printTicTacToe();
 
         System.out.println("Enter the coordinates:");
+        String coordinates = scanner.nextLine();
+        ticTacToe.placeCell(coordinates);
     }
 }
