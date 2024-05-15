@@ -32,18 +32,45 @@ class TicTacToe {
         System.out.println("---------");
     }
 
-    public void placeCell(String coordinates) {
+    public String placeCell(String coordinates) {
         String[] coordinatesIntoArray = coordinates.split(" ");
-        validateCoordinates(coordinatesIntoArray);
+        if (!areCoordinatesValidNumbers(coordinatesIntoArray)) return "UNSUCCESSFUL";
+        if (!areCoordinatesInsideValidRange()) return "UNSUCCESSFUL";
+        if (!isCellEmpty()) return "UNSUCCESSFUL";
+
+        return "SUCCESSFUL";
     }
 
-    private void validateCoordinates(String[] coordinates) {
+    public boolean areCoordinatesInsideValidRange() {
+        if (this.coordinate1 < 1 | this.coordinate1 > 3 | this.coordinate2 < 1 | this.coordinate2 > 3) {
+            System.out.println("Coordinates should be from 1 to 3!");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean isCellEmpty() {
+        int fixedCoordinate1 = this.coordinate1 - 1;
+        int fixedCoordinate2 = this.coordinate2 - 1;
+
+        if (this.ticTacToe[fixedCoordinate1][fixedCoordinate2].equals("_")) {
+            return true;
+        }
+
+        System.out.println("This cell is occupied! Choose another one!");
+        return false;
+    }
+
+    private boolean areCoordinatesValidNumbers(String[] coordinates) {
         try {
             this.coordinate1 = Integer.parseInt(coordinates[0]);
             this.coordinate2 = Integer.parseInt(coordinates[1]);
         } catch (NumberFormatException e) {
             System.out.println("You should enter numbers!");
+            return false;
         }
+        return true;
     }
 
 }
@@ -57,8 +84,12 @@ public class Main {
         TicTacToe ticTacToe = new TicTacToe(cells);
         ticTacToe.printTicTacToe();
 
-        System.out.println("Enter the coordinates:");
-        String coordinates = scanner.nextLine();
-        ticTacToe.placeCell(coordinates);
+        String isSuccessfulMove;
+        do {
+            System.out.println("Enter the coordinates:");
+            String coordinates = scanner.nextLine();
+            isSuccessfulMove = ticTacToe.placeCell(coordinates);
+        } while (isSuccessfulMove.equals("UNSUCCESSFUL"));
+
     }
 }
