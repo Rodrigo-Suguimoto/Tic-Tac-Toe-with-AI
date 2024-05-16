@@ -7,26 +7,26 @@ class TicTacToe {
     final int MATRIX_SIZE = 3;
     protected int coordinate1;
     protected int coordinate2;
-    protected String[][] ticTacToe = new String[MATRIX_SIZE][MATRIX_SIZE];
+    protected char[][] ticTacToe = new char[MATRIX_SIZE][MATRIX_SIZE];
 
     public TicTacToe(String cells) {
         int charIndex = 0;
 
         for (int i = 0; i < ticTacToe.length; i++) {
             for (int j = 0; j < ticTacToe[i].length; j++) {
-                ticTacToe[i][j] = String.valueOf(cells.charAt(charIndex));
+                ticTacToe[i][j] = cells.charAt(charIndex);
                 charIndex++;
             }
         }
     }
 
-    public String[][] getTicTacToe() {
+    public char[][] getTicTacToe() {
         return this.ticTacToe;
     }
 
     public void printTicTacToe() {
         System.out.println("---------");
-        for (String[] cell : ticTacToe) {
+        for (char[] cell : ticTacToe) {
             System.out.printf("| %s %s %s |\n", cell[0], cell[1], cell[2]);
         }
         System.out.println("---------");
@@ -54,12 +54,35 @@ class TicTacToe {
         int fixedCoordinate1 = this.coordinate1 - 1;
         int fixedCoordinate2 = this.coordinate2 - 1;
 
-        if (this.ticTacToe[fixedCoordinate1][fixedCoordinate2].equals("_")) {
+        if (this.ticTacToe[fixedCoordinate1][fixedCoordinate2] == '_') {
             return true;
         }
 
         System.out.println("This cell is occupied! Choose another one!");
         return false;
+    }
+
+    private char isXorO() {
+        int numberOfX = 0;
+        int numberOfO = 0;
+
+        for (int i = 0; i < this.ticTacToe.length; i++) {
+            for (int j = 0; j < this.ticTacToe[i].length; j++) {
+                if (this.ticTacToe[i][j] == 'X') {
+                    numberOfX++;
+                }
+
+                if (this.ticTacToe[i][j] == 'O') {
+                    numberOfO++;
+                }
+            }
+        }
+
+        if (numberOfX == numberOfO) {
+            return 'X';
+        }
+
+        return 'O';
     }
 
     private boolean areCoordinatesValidNumbers(String[] coordinates) {
