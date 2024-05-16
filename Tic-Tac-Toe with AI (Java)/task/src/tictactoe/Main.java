@@ -19,11 +19,6 @@ class TicTacToe {
             }
         }
     }
-
-    public char[][] getTicTacToe() {
-        return this.ticTacToe;
-    }
-
     public void printTicTacToe() {
         System.out.println("---------");
         for (char[] cell : ticTacToe) {
@@ -37,6 +32,11 @@ class TicTacToe {
         if (!areCoordinatesValidNumbers(coordinatesIntoArray)) return "UNSUCCESSFUL";
         if (!areCoordinatesInsideValidRange()) return "UNSUCCESSFUL";
         if (!isCellEmpty()) return "UNSUCCESSFUL";
+
+        int fixedCoordinate1 = this.coordinate1 - 1;
+        int fixedCoordinate2 = this.coordinate2 - 1;
+
+        this.ticTacToe[fixedCoordinate1][fixedCoordinate2] = isXorO();
 
         return "SUCCESSFUL";
     }
@@ -114,5 +114,6 @@ public class Main {
             isSuccessfulMove = ticTacToe.placeCell(coordinates);
         } while (isSuccessfulMove.equals("UNSUCCESSFUL"));
 
+        ticTacToe.printTicTacToe();
     }
 }
