@@ -25,6 +25,8 @@ class TicTacToe {
             System.out.printf("| %s %s %s |\n", cell[0], cell[1], cell[2]);
         }
         System.out.println("---------");
+
+        checkStateOfTheGame();
     }
 
     public String placeCell(String coordinates) {
@@ -94,6 +96,61 @@ class TicTacToe {
             return false;
         }
         return true;
+    }
+
+    private void checkStateOfTheGame() {
+        if (hasWonAcross('X')) {
+            System.out.println("X wins");
+            return;
+        }
+
+        if (hasWonAcross('O')) {
+            System.out.println("O wins");
+            return;
+        }
+
+        if (hasWonUp('X')) {
+            System.out.println("X wins");
+            return;
+        }
+
+        if (hasWonUp('O')) {
+            System.out.println("O wins");
+            return;
+        }
+    }
+
+    private boolean hasWonAcross(char player) {
+        int repeatedMovements = 0;
+        final int REPEATED_MOVEMENTS_TO_WIN = 3;
+        for (int i = 0; i < this.ticTacToe.length; i++) {
+            if (repeatedMovements == REPEATED_MOVEMENTS_TO_WIN) return true;
+            repeatedMovements = 0; // Reset counter
+            for (int j = 0; j < this.ticTacToe[i].length; j++) {
+                if (this.ticTacToe[i][j] == player) repeatedMovements++;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean hasWonUp(char player) {
+        final int REPEATED_MOVEMENTS_TO_WIN = 3;
+        final int MATRIX_SIZE = 3;
+
+        int repeat = 0;
+        int j = 0;
+        while (repeat < MATRIX_SIZE) {
+            int repeatedMovements = 0;
+            for (int i = 0; i < MATRIX_SIZE; i++) {
+                if (this.ticTacToe[i][j] == player) repeatedMovements++;
+            }
+            if (repeatedMovements == REPEATED_MOVEMENTS_TO_WIN) return true;
+            j++;
+            repeat++;
+        }
+
+        return false;
     }
 
 }
