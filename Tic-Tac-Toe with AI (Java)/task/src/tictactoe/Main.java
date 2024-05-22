@@ -13,11 +13,17 @@ class TicTacToe {
     public TicTacToe(String cells) {
         int charIndex = 0;
 
-        for (int i = 0; i < ticTacToe.length; i++) {
-            for (int j = 0; j < ticTacToe[i].length; j++) {
-                ticTacToe[i][j] = cells.charAt(charIndex);
+        for (int i = 0; i < this.ticTacToe.length; i++) {
+            for (int j = 0; j < this.ticTacToe[i].length; j++) {
+                this.ticTacToe[i][j] = cells.charAt(charIndex);
                 charIndex++;
             }
+        }
+    }
+
+    public TicTacToe() {
+        for (int i = 0; i < this.ticTacToe.length; i++) {
+            Arrays.fill(this.ticTacToe[i], ' ');
         }
     }
 
@@ -205,10 +211,8 @@ class TicTacToe {
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter the cells:");
-        String cells = scanner.nextLine();
 
-        TicTacToe ticTacToe = new TicTacToe(cells);
+        TicTacToe ticTacToe = new TicTacToe();
         ticTacToe.printTicTacToe();
         if (ticTacToe.doesTheGameHaveAWinner()) return;
         if (ticTacToe.isGameOver()) return;
