@@ -8,7 +8,7 @@ class TicTacToe {
     protected int coordinate1;
     protected int coordinate2;
     private boolean isGameOver;
-    protected char[][] ticTacToe = new char[MATRIX_SIZE][MATRIX_SIZE];
+    private char[][] ticTacToe = new char[MATRIX_SIZE][MATRIX_SIZE];
 
     public TicTacToe(String cells) {
         int charIndex = 0;
@@ -67,7 +67,7 @@ class TicTacToe {
         int fixedCoordinate1 = this.coordinate1 - 1;
         int fixedCoordinate2 = this.coordinate2 - 1;
 
-        if (this.ticTacToe[fixedCoordinate1][fixedCoordinate2] == '_') {
+        if (this.ticTacToe[fixedCoordinate1][fixedCoordinate2] == ' ') {
             return true;
         }
 
@@ -149,7 +149,7 @@ class TicTacToe {
 
         for (int i = 0; i < this.ticTacToe.length; i++) {
             for (int j = 0; j < this.ticTacToe[i].length; j++) {
-                if (this.ticTacToe[i][j] != '_') {
+                if (this.ticTacToe[i][j] != ' ') {
                     counter++;
                 }
             }
