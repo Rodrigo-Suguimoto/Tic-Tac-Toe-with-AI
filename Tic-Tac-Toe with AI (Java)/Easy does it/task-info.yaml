@@ -201,6 +201,9 @@ files:
           }
       }
     learner_created: false
+  - name: src/tictactoe/TicTacToe.java
+    visible: true
+    learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7435#comment
 status: Unchecked
 record: -1
