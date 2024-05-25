@@ -30,6 +30,8 @@ public class TicTacToe {
         return this.isGameOver;
     }
 
+    public char[][] getTicTacToe() { return this.ticTacToe; }
+
     public void printTicTacToe() {
         System.out.println("---------");
         for (char[] cell : ticTacToe) {
@@ -74,7 +76,7 @@ public class TicTacToe {
         return false;
     }
 
-    private char isXorO() {
+    protected char isXorO() {
         int numberOfX = 0;
         int numberOfO = 0;
 
