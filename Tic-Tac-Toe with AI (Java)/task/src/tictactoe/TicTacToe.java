@@ -1,4 +1,5 @@
 package tictactoe;
+
 import java.util.Arrays;
 
 public class TicTacToe {
