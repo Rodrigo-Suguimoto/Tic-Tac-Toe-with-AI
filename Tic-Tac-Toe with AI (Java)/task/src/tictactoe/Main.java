@@ -1,5 +1,8 @@
 package tictactoe;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.Scanner;
 
 class TicTacToe {
@@ -8,22 +11,30 @@ class TicTacToe {
     protected int coordinate1;
     protected int coordinate2;
     private boolean isGameOver;
-    protected char[][] ticTacToe = new char[MATRIX_SIZE][MATRIX_SIZE];
+    private char[][] ticTacToe = new char[MATRIX_SIZE][MATRIX_SIZE];
 
     public TicTacToe(String cells) {
         int charIndex = 0;
 
-        for (int i = 0; i < ticTacToe.length; i++) {
-            for (int j = 0; j < ticTacToe[i].length; j++) {
-                ticTacToe[i][j] = cells.charAt(charIndex);
+        for (int i = 0; i < this.ticTacToe.length; i++) {
+            for (int j = 0; j < this.ticTacToe[i].length; j++) {
+                this.ticTacToe[i][j] = cells.charAt(charIndex);
                 charIndex++;
             }
+        }
+    }
+
+    public TicTacToe() {
+        for (int i = 0; i < this.ticTacToe.length; i++) {
+            Arrays.fill(this.ticTacToe[i], ' ');
         }
     }
 
     public boolean isGameOver() {
         return this.isGameOver;
     }
+
+    public char[][] getTicTacToe() { return this.ticTacToe; }
 
     public void printTicTacToe() {
         System.out.println("---------");
@@ -61,7 +72,7 @@ class TicTacToe {
         int fixedCoordinate1 = this.coordinate1 - 1;
         int fixedCoordinate2 = this.coordinate2 - 1;
 
-        if (this.ticTacToe[fixedCoordinate1][fixedCoordinate2] == '_') {
+        if (this.ticTacToe[fixedCoordinate1][fixedCoordinate2] == ' ') {
             return true;
         }
 
@@ -69,7 +80,7 @@ class TicTacToe {
         return false;
     }
 
-    private char isXorO() {
+    protected char isXorO() {
         int numberOfX = 0;
         int numberOfO = 0;
 
@@ -134,30 +145,36 @@ class TicTacToe {
             return true;
         }
 
+        if (isDraw()) {
+            finishGame();
+            return true;
+        }
+
         return false;
     }
 
-    protected void isTicTacToeComplete() {
+    protected boolean isDraw() {
         int MAXIMUM_NUMBER_OF_CELLS = 9;
         int counter = 0;
 
         for (int i = 0; i < this.ticTacToe.length; i++) {
             for (int j = 0; j < this.ticTacToe[i].length; j++) {
-                if (this.ticTacToe[i][j] != '_') {
+                if (this.ticTacToe[i][j] != ' ') {
                     counter++;
                 }
             }
         }
 
-        if (counter == MAXIMUM_NUMBER_OF_CELLS) {
-            System.out.println("Draw");
-        } else {
-            System.out.println("Game not finished");
-        }
+        return counter == MAXIMUM_NUMBER_OF_CELLS;
     }
 
     private void finishGame(char player) {
         System.out.printf("%s wins", player);
+        this.isGameOver = true;
+    }
+
+    private void finishGame() {
+        System.out.println("Draw");
         this.isGameOver = true;
     }
 
@@ -202,26 +219,64 @@ class TicTacToe {
 
 }
 
+class AIPlayer {
+
+    private static ArrayList<int[]> findEmptyCells(char[][] ticTacToe) {
+        ArrayList<int[]> emptyCells = new ArrayList<>();
+
+        for (int i = 0; i < ticTacToe.length; i++) {
+            for (int j = 0; j < ticTacToe[i].length; j++) {
+                if (ticTacToe[i][j] == ' ') {
+                    emptyCells.add(new int[]{i + 1, j + 1}); // Adding 1 to adapt coordinates to the TicTacToe
+                }
+            }
+        }
+
+        return emptyCells;
+    }
+
+    public static int[] getRandomCoordinates(char[][] ticTacToe) {
+        ArrayList<int[]> emptyCells = findEmptyCells(ticTacToe);
+        Random rand = new Random();
+        int randomIndex = rand.nextInt(emptyCells.size());
+
+        return emptyCells.get(randomIndex);
+    }
+
+}
+
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter the cells:");
-        String cells = scanner.nextLine();
 
-        TicTacToe ticTacToe = new TicTacToe(cells);
+        TicTacToe ticTacToe = new TicTacToe();
         ticTacToe.printTicTacToe();
-        if (ticTacToe.doesTheGameHaveAWinner()) return;
-        if (ticTacToe.isGameOver()) return;
 
-        String isSuccessfulMove;
-        do {
-            System.out.println("Enter the coordinates:");
-            String coordinates = scanner.nextLine();
-            isSuccessfulMove = ticTacToe.placeCell(coordinates);
-        } while (isSuccessfulMove.equals("UNSUCCESSFUL"));
+        boolean isGameOver = ticTacToe.isGameOver();
+        while (!isGameOver) {
+            if (ticTacToe.isXorO() == 'X') {
+                String isSuccessfulMove;
+                do {
+                    System.out.println("Enter the coordinates:");
+                    String coordinates = scanner.nextLine();
+                    isSuccessfulMove = ticTacToe.placeCell(coordinates);
+                } while (isSuccessfulMove.equals("UNSUCCESSFUL"));
+            }
+            ticTacToe.printTicTacToe(); // Prints the TicTacToe after a successful move
+            ticTacToe.doesTheGameHaveAWinner(); // Verify whether there's a winner or it's a draw
+            isGameOver = ticTacToe.isGameOver(); // Verify if game is over
 
-        ticTacToe.printTicTacToe();
-        if (ticTacToe.doesTheGameHaveAWinner()) return;
-        ticTacToe.isTicTacToeComplete();
+            if (ticTacToe.isXorO() == 'O' && !isGameOver) {
+                System.out.println("Making move level \"easy\"");
+                int[] randomCoordinate = AIPlayer.getRandomCoordinates(ticTacToe.getTicTacToe());
+                String coordinates = String.format("%s %s", randomCoordinate[0], randomCoordinate[1]);
+                ticTacToe.placeCell(coordinates);
+
+                ticTacToe.printTicTacToe(); // Prints the TicTacToe after a successful move
+                ticTacToe.doesTheGameHaveAWinner(); // Verify whether there's a winner or it's a draw
+                isGameOver = ticTacToe.isGameOver(); // Verify if game is over
+            }
+        }
     }
+
 }
