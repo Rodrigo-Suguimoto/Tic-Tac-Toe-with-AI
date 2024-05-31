@@ -248,6 +248,11 @@ class AIPlayer {
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        System.out.println("Input command:");
+        String userCommand = scanner.nextLine();
+        GameMenu gameMenu = new GameMenu();
+        gameMenu.processUserCommand(userCommand);
+        System.out.println(gameMenu.getContinueGame());
 
         TicTacToe ticTacToe = new TicTacToe();
         ticTacToe.printTicTacToe();

@@ -247,6 +247,9 @@ files:
           }
       }
     learner_created: false
+  - name: src/tictactoe/GameMenu.java
+    visible: true
+    learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7436#comment
 status: Unchecked
 record: -1
