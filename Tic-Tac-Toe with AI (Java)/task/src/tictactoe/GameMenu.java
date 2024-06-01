@@ -2,7 +2,8 @@ package tictactoe;
 
 public class GameMenu {
 
-    boolean continueGame;
+    boolean isValidCommand;
+    boolean exitGame;
     String xPlayer;
     String oPlayer;
 
@@ -16,7 +17,6 @@ public class GameMenu {
 
             String xPlayer = parameters[1];
             String oPlayer = parameters[2];
-
             if (
                     (!xPlayer.equals("easy") && !xPlayer.equals("user")) ||
                             (!oPlayer.equals("easy") && !oPlayer.equals("user"))
@@ -25,23 +25,27 @@ public class GameMenu {
                 return;
             }
 
-            this.continueGame = true;
+            this.isValidCommand = true;
             this.xPlayer = xPlayer;
             this.oPlayer = oPlayer;
+            return;
         }
 
-        if (parameters[0].equals("exit")) {
-            this.continueGame = false;
+        if (parameters[0].equals("exit") && parameters.length == 1) {
+            this.isValidCommand = true;
+            this.exitGame = true;
         }
     }
 
     private void invalidCommand() {
         System.out.println("Bad parameters!");
-        this.continueGame = false;
+        this.isValidCommand = false;
     }
 
-    public boolean getContinueGame() {
-        return this.continueGame;
+    public boolean isValidCommand() {
+        return this.isValidCommand;
     }
+
+    public boolean isExitGame() { return this.exitGame; }
 
 }

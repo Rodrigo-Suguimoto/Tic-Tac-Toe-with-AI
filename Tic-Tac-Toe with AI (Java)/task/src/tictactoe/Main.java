@@ -2,14 +2,19 @@ package tictactoe;
 
 import java.util.Scanner;
 
-
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Input command:");
-        String userCommand = scanner.nextLine();
-        GameMenu gameMenu = new GameMenu();
-        gameMenu.processUserCommand(userCommand);
+
+        boolean exitGame = false;
+        do {
+            System.out.println("Input command:");
+            String userCommand = scanner.nextLine();
+            GameMenu gameMenu = new GameMenu();
+            gameMenu.processUserCommand(userCommand);
+            exitGame = gameMenu.isExitGame();
+
+        } while (!exitGame);
 
         TicTacToe ticTacToe = new TicTacToe();
         ticTacToe.printTicTacToe();
