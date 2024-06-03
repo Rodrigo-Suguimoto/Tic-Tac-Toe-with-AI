@@ -5,6 +5,86 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
+class GameMenu {
+
+    protected boolean isValidCommand;
+    protected boolean exitGame;
+    protected String xPlayer;
+    protected String oPlayer;
+
+    public void processUserCommand(String userCommand) {
+        String[] parameters = userCommand.split(" ");
+        if (parameters[0].equals("start")) {
+            if (parameters.length != 3) {
+                invalidCommand();
+                return;
+            }
+
+            String xPlayer = parameters[1];
+            String oPlayer = parameters[2];
+            if (
+                    (!xPlayer.equals("easy") && !xPlayer.equals("user")) ||
+                            (!oPlayer.equals("easy") && !oPlayer.equals("user"))
+            ) {
+                invalidCommand();
+                return;
+            }
+
+            this.isValidCommand = true;
+            this.xPlayer = xPlayer;
+            this.oPlayer = oPlayer;
+            return;
+        }
+
+        if (parameters[0].equals("exit") && parameters.length == 1) {
+            this.isValidCommand = true;
+            this.exitGame = true;
+        }
+    }
+
+    private void invalidCommand() {
+        System.out.println("Bad parameters!");
+        this.isValidCommand = false;
+    }
+
+    public boolean isValidCommand() {
+        return this.isValidCommand;
+    }
+
+    public boolean isExitGame() { return this.exitGame; }
+
+    public String getXPlayer() { return this.xPlayer; }
+
+    public String getOPlayer() { return this.oPlayer; }
+
+}
+
+class AIPlayer {
+
+    private static ArrayList<int[]> findEmptyCells(char[][] ticTacToe) {
+        ArrayList<int[]> emptyCells = new ArrayList<>();
+
+        for (int i = 0; i < ticTacToe.length; i++) {
+            for (int j = 0; j < ticTacToe[i].length; j++) {
+                if (ticTacToe[i][j] == ' ') {
+                    emptyCells.add(new int[]{i + 1, j + 1}); // Adding 1 to adapt coordinates to the TicTacToe
+                }
+            }
+        }
+
+        return emptyCells;
+    }
+
+    public static int[] getRandomCoordinates(char[][] ticTacToe) {
+        ArrayList<int[]> emptyCells = findEmptyCells(ticTacToe);
+        Random rand = new Random();
+        int randomIndex = rand.nextInt(emptyCells.size());
+
+        return emptyCells.get(randomIndex);
+    }
+
+}
+
 class TicTacToe {
 
     final int MATRIX_SIZE = 3;
@@ -169,7 +249,7 @@ class TicTacToe {
     }
 
     private void finishGame(char player) {
-        System.out.printf("%s wins", player);
+        System.out.printf("%s wins\n", player);
         this.isGameOver = true;
     }
 
@@ -219,63 +299,70 @@ class TicTacToe {
 
 }
 
-class AIPlayer {
-
-    private static ArrayList<int[]> findEmptyCells(char[][] ticTacToe) {
-        ArrayList<int[]> emptyCells = new ArrayList<>();
-
-        for (int i = 0; i < ticTacToe.length; i++) {
-            for (int j = 0; j < ticTacToe[i].length; j++) {
-                if (ticTacToe[i][j] == ' ') {
-                    emptyCells.add(new int[]{i + 1, j + 1}); // Adding 1 to adapt coordinates to the TicTacToe
-                }
-            }
-        }
-
-        return emptyCells;
-    }
-
-    public static int[] getRandomCoordinates(char[][] ticTacToe) {
-        ArrayList<int[]> emptyCells = findEmptyCells(ticTacToe);
-        Random rand = new Random();
-        int randomIndex = rand.nextInt(emptyCells.size());
-
-        return emptyCells.get(randomIndex);
-    }
-
-}
-
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        TicTacToe ticTacToe = new TicTacToe();
-        ticTacToe.printTicTacToe();
+        boolean exitGame = false;
+        do {
+            GameMenu gameMenu = new GameMenu();
 
-        boolean isGameOver = ticTacToe.isGameOver();
-        while (!isGameOver) {
-            if (ticTacToe.isXorO() == 'X') {
+            // Loop until get a valid user input
+            boolean isValidCommand = false;
+            do {
+                System.out.println("Input command:");
+                String userCommand = scanner.nextLine();
+                gameMenu.processUserCommand(userCommand);
+                isValidCommand = gameMenu.isValidCommand;
+            } while (!isValidCommand);
+
+            exitGame = gameMenu.isExitGame();
+            // If user inputs "exit", do nothing
+            if (!exitGame) {
+                TicTacToe ticTacToe = new TicTacToe();
+                ticTacToe.printTicTacToe();
+
+                boolean isGameOver = ticTacToe.isGameOver();
+                while (!isGameOver) {
+                    String xPlayer = gameMenu.getXPlayer();
+                    String oPlayer = gameMenu.getOPlayer();
+
+                    makeAMove(xPlayer, ticTacToe);
+                    ticTacToe.printTicTacToe(); // Prints the TicTacToe after a successful move
+                    ticTacToe.doesTheGameHaveAWinner(); // Verify whether there's a winner or it's a draw
+                    isGameOver = ticTacToe.isGameOver(); // Verify if game is over
+
+                    if (!isGameOver) {
+                        makeAMove(oPlayer, ticTacToe);
+                        ticTacToe.printTicTacToe(); // Prints the TicTacToe after a successful move
+                        ticTacToe.doesTheGameHaveAWinner(); // Verify whether there's a winner or it's a draw
+                        isGameOver = ticTacToe.isGameOver(); // Verify if game is over
+                    }
+                }
+            }
+
+        } while (!exitGame);
+
+    }
+
+    public static void makeAMove(String player, TicTacToe ticTacToe) {
+        Scanner scanner = new Scanner(System.in);
+
+        switch (player) {
+            case "user":
                 String isSuccessfulMove;
                 do {
                     System.out.println("Enter the coordinates:");
                     String coordinates = scanner.nextLine();
                     isSuccessfulMove = ticTacToe.placeCell(coordinates);
                 } while (isSuccessfulMove.equals("UNSUCCESSFUL"));
-            }
-            ticTacToe.printTicTacToe(); // Prints the TicTacToe after a successful move
-            ticTacToe.doesTheGameHaveAWinner(); // Verify whether there's a winner or it's a draw
-            isGameOver = ticTacToe.isGameOver(); // Verify if game is over
-
-            if (ticTacToe.isXorO() == 'O' && !isGameOver) {
+                break;
+            case "easy":
                 System.out.println("Making move level \"easy\"");
                 int[] randomCoordinate = AIPlayer.getRandomCoordinates(ticTacToe.getTicTacToe());
                 String coordinates = String.format("%s %s", randomCoordinate[0], randomCoordinate[1]);
                 ticTacToe.placeCell(coordinates);
-
-                ticTacToe.printTicTacToe(); // Prints the TicTacToe after a successful move
-                ticTacToe.doesTheGameHaveAWinner(); // Verify whether there's a winner or it's a draw
-                isGameOver = ticTacToe.isGameOver(); // Verify if game is over
-            }
+                break;
         }
     }
 
