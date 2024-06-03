@@ -247,18 +247,9 @@ files:
           }
       }
     learner_created: false
-  - name: src/tictactoe/GameMenu.java
-    visible: true
-    learner_created: true
-  - name: src/tictactoe/TicTacToe.java
-    visible: true
-    learner_created: true
-  - name: src/tictactoe/AIPlayer.java
-    visible: true
-    learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7436#comment
-status: Failed
+status: Solved
 feedback:
-  message: Compilation Failed
-  time: "Mon, 03 Jun 2024 12:19:16 UTC"
+  message: Congratulations!
+  time: "Mon, 03 Jun 2024 12:25:53 UTC"
 record: -1
