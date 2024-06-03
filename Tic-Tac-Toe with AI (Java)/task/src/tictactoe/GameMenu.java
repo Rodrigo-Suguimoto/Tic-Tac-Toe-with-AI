@@ -2,10 +2,10 @@ package tictactoe;
 
 public class GameMenu {
 
-    boolean isValidCommand;
-    boolean exitGame;
-    String xPlayer;
-    String oPlayer;
+    protected boolean isValidCommand;
+    protected boolean exitGame;
+    protected String xPlayer;
+    protected String oPlayer;
 
     public void processUserCommand(String userCommand) {
         String[] parameters = userCommand.split(" ");
@@ -47,5 +47,9 @@ public class GameMenu {
     }
 
     public boolean isExitGame() { return this.exitGame; }
+
+    public String getXPlayer() { return this.xPlayer; }
+
+    public String getOPlayer() { return this.oPlayer; }
 
 }

@@ -166,7 +166,7 @@ public class TicTacToe {
     }
 
     private void finishGame(char player) {
-        System.out.printf("%s wins", player);
+        System.out.printf("%s wins\n", player);
         this.isGameOver = true;
     }
 
