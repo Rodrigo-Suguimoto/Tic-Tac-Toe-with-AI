@@ -328,15 +328,11 @@ public class Main {
                     String oPlayer = gameMenu.getOPlayer();
 
                     makeAMove(xPlayer, ticTacToe);
-                    ticTacToe.printTicTacToe(); // Prints the TicTacToe after a successful move
-                    ticTacToe.doesTheGameHaveAWinner(); // Verify whether there's a winner or it's a draw
-                    isGameOver = ticTacToe.isGameOver(); // Verify if game is over
+                    isGameOver = checkIfGameIsOver(ticTacToe); // Verify if game is over
 
                     if (!isGameOver) {
                         makeAMove(oPlayer, ticTacToe);
-                        ticTacToe.printTicTacToe(); // Prints the TicTacToe after a successful move
-                        ticTacToe.doesTheGameHaveAWinner(); // Verify whether there's a winner or it's a draw
-                        isGameOver = ticTacToe.isGameOver(); // Verify if game is over
+                        isGameOver = checkIfGameIsOver(ticTacToe); // Verify if game is over
                     }
                 }
             }
@@ -364,6 +360,12 @@ public class Main {
                 ticTacToe.placeCell(coordinates);
                 break;
         }
+    }
+
+    public static boolean checkIfGameIsOver(TicTacToe ticTacToe) {
+        ticTacToe.printTicTacToe(); // Prints the TicTacToe after a successful move
+        ticTacToe.doesTheGameHaveAWinner(); // Verify whether there's a winner or it's a draw
+        return ticTacToe.isGameOver(); // Verify if game is over
     }
 
 }
