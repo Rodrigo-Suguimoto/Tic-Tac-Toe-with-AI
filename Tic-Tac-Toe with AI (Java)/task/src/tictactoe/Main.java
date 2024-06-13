@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.List;
 
 class GameMenu {
 
@@ -14,6 +15,8 @@ class GameMenu {
 
     public void processUserCommand(String userCommand) {
         String[] parameters = userCommand.split(" ");
+        final List<String> VALID_PLAYERS = Arrays.asList("user", "easy", "medium");
+
         if (parameters[0].equals("start")) {
             if (parameters.length != 3) {
                 invalidCommand();
@@ -23,8 +26,7 @@ class GameMenu {
             String xPlayer = parameters[1];
             String oPlayer = parameters[2];
             if (
-                    (!xPlayer.equals("easy") && !xPlayer.equals("user")) ||
-                            (!oPlayer.equals("easy") && !oPlayer.equals("user"))
+                    !VALID_PLAYERS.contains(xPlayer) || !VALID_PLAYERS.contains(oPlayer)
             ) {
                 invalidCommand();
                 return;
@@ -81,6 +83,20 @@ class AIPlayer {
         int randomIndex = rand.nextInt(emptyCells.size());
 
         return emptyCells.get(randomIndex);
+    }
+
+
+    public static void planNextMove(char[][] ticTacToe) {
+        scanTicTacToeHorizontally('X', ticTacToe);
+    }
+
+    public static void scanTicTacToeHorizontally(char player, char[][] ticTacToe) {
+        int columnIndex = 0;
+        for (int i = 0; i < ticTacToe.length; i++) {
+            if (columnIndex == 3) columnIndex = 0; // Reset columnIndex
+            System.out.println(i + " " + columnIndex);
+            columnIndex++;
+        }
     }
 
 }
@@ -359,6 +375,9 @@ public class Main {
                 String coordinates = String.format("%s %s", randomCoordinate[0], randomCoordinate[1]);
                 ticTacToe.placeCell(coordinates);
                 break;
+            case "medium":
+                System.out.println("Making move level \"medium\"");
+                AIPlayer.planNextMove(ticTacToe.getTicTacToe());
         }
     }
 
