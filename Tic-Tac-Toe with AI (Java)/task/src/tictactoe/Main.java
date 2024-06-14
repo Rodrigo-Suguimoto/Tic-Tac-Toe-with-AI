@@ -77,26 +77,46 @@ class AIPlayer {
         return emptyCells;
     }
 
-    public static int[] getRandomCoordinates(char[][] ticTacToe) {
+    public static String getRandomCoordinates(char[][] ticTacToe) {
         ArrayList<int[]> emptyCells = findEmptyCells(ticTacToe);
         Random rand = new Random();
         int randomIndex = rand.nextInt(emptyCells.size());
+        int[] randomCoordinates = emptyCells.get(randomIndex);
 
-        return emptyCells.get(randomIndex);
+        return String.format("%s %s", randomCoordinates[0], randomCoordinates[1]);
     }
 
 
-    public static void planNextMove(char[][] ticTacToe) {
-        scanTicTacToeHorizontally('X', ticTacToe);
+    public static String planMove(char[][] ticTacToe, char xOrO) {
+        String horizontalCoordinates = scanTicTacToeHorizontally(xOrO, ticTacToe);
+        if (!horizontalCoordinates.isEmpty()) return horizontalCoordinates;
+
+        return "";
     }
 
-    public static void scanTicTacToeHorizontally(char player, char[][] ticTacToe) {
-        int columnIndex = 0;
-        for (int i = 0; i < ticTacToe.length; i++) {
-            if (columnIndex == 3) columnIndex = 0; // Reset columnIndex
-            System.out.println(i + " " + columnIndex);
-            columnIndex++;
+    public static String scanTicTacToeHorizontally(char xOrO, char[][] ticTacToe) {
+        final int MATRIX_SIZE = 3;
+
+        for (int i = 0; i < MATRIX_SIZE; i++) {
+            int counterOfX = 0;
+            int counterOfO = 0;
+            for (int j = 0; j < MATRIX_SIZE; j++) {
+                if (ticTacToe[i][j] == 'X') counterOfX++;
+                if (ticTacToe[i][j] == 'O') counterOfO++;
+
+                if (counterOfX == 2) {
+                    // Find the index of the empty cell in the horizontal line that has already two 'X'
+                    for (int z = 0; z < MATRIX_SIZE; z++) {
+                        if (ticTacToe[i][z] == ' ') {
+                            return String.format("%s %s", i + 1, z + 1);
+                        }
+                    }
+                }
+
+            }
         }
+
+        return "";
     }
 
 }
@@ -343,11 +363,11 @@ public class Main {
                     String xPlayer = gameMenu.getXPlayer();
                     String oPlayer = gameMenu.getOPlayer();
 
-                    makeAMove(xPlayer, ticTacToe);
+                    makeAMove(xPlayer, ticTacToe, 'X');
                     isGameOver = checkIfGameIsOver(ticTacToe); // Verify if game is over
 
                     if (!isGameOver) {
-                        makeAMove(oPlayer, ticTacToe);
+                        makeAMove(oPlayer, ticTacToe, 'O');
                         isGameOver = checkIfGameIsOver(ticTacToe); // Verify if game is over
                     }
                 }
@@ -357,7 +377,7 @@ public class Main {
 
     }
 
-    public static void makeAMove(String player, TicTacToe ticTacToe) {
+    public static void makeAMove(String player, TicTacToe ticTacToe, char xOrO) {
         Scanner scanner = new Scanner(System.in);
 
         switch (player) {
@@ -371,13 +391,14 @@ public class Main {
                 break;
             case "easy":
                 System.out.println("Making move level \"easy\"");
-                int[] randomCoordinate = AIPlayer.getRandomCoordinates(ticTacToe.getTicTacToe());
-                String coordinates = String.format("%s %s", randomCoordinate[0], randomCoordinate[1]);
-                ticTacToe.placeCell(coordinates);
+                ticTacToe.placeCell(AIPlayer.getRandomCoordinates(ticTacToe.getTicTacToe()));
                 break;
             case "medium":
                 System.out.println("Making move level \"medium\"");
-                AIPlayer.planNextMove(ticTacToe.getTicTacToe());
+                String plannedMovement = AIPlayer.planMove(ticTacToe.getTicTacToe(), xOrO);
+                if (plannedMovement.isEmpty()) {
+                    ticTacToe.placeCell(AIPlayer.getRandomCoordinates(ticTacToe.getTicTacToe()));
+                }
         }
     }
 
