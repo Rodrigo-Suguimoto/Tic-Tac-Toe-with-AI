@@ -63,6 +63,9 @@ class GameMenu {
 
 class AIPlayer {
 
+    final static int MATRIX_SIZE = 3;
+    final static int NUMBER_OF_CELLS_ALMOST_TO_WIN_OR_LOSE = 2;
+
     private static ArrayList<int[]> findEmptyCells(char[][] ticTacToe) {
         ArrayList<int[]> emptyCells = new ArrayList<>();
 
@@ -87,28 +90,34 @@ class AIPlayer {
     }
 
 
-    public static String planMove(char[][] ticTacToe, char xOrO) {
-        String horizontalCoordinates = scanTicTacToeHorizontally(xOrO, ticTacToe);
-        if (!horizontalCoordinates.isEmpty()) return horizontalCoordinates;
+    public static String planMove(char[][] ticTacToe) {
+        String horizontalCoordinates = scanTicTacToeHorizontally(ticTacToe);
+        if (!horizontalCoordinates.isEmpty()) {
+            return horizontalCoordinates;
+        }
+
+        String verticalCoordinates = scanTicTacToeVertically(ticTacToe);
+        System.out.println(verticalCoordinates);
+        if (!verticalCoordinates.isEmpty()) {
+            return verticalCoordinates;
+        }
 
         return "";
     }
 
-    public static String scanTicTacToeHorizontally(char xOrO, char[][] ticTacToe) {
-        final int MATRIX_SIZE = 3;
-
+    private static String scanTicTacToeVertically(char[][] ticTacToe) {
         for (int i = 0; i < MATRIX_SIZE; i++) {
             int counterOfX = 0;
             int counterOfO = 0;
             for (int j = 0; j < MATRIX_SIZE; j++) {
-                if (ticTacToe[i][j] == 'X') counterOfX++;
-                if (ticTacToe[i][j] == 'O') counterOfO++;
+                if (ticTacToe[j][i] == 'X') counterOfX++;
+                if (ticTacToe[j][i] == 'O') counterOfO++;
 
-                if (counterOfX == 2) {
-                    // Find the index of the empty cell in the horizontal line that has already two 'X'
+                if (counterOfX == NUMBER_OF_CELLS_ALMOST_TO_WIN_OR_LOSE || counterOfO == NUMBER_OF_CELLS_ALMOST_TO_WIN_OR_LOSE) {
                     for (int z = 0; z < MATRIX_SIZE; z++) {
                         if (ticTacToe[i][z] == ' ') {
-                            return String.format("%s %s", i + 1, z + 1);
+                            System.out.println(i + " " + z);
+                            return String.format("%s %s", z + 1, i + 1);
                         }
                     }
                 }
@@ -116,6 +125,27 @@ class AIPlayer {
             }
         }
 
+        return "";
+    }
+
+    private static String scanTicTacToeHorizontally(char[][] ticTacToe) {
+        for (int i = 0; i < MATRIX_SIZE; i++) {
+            int counterOfX = 0;
+            int counterOfO = 0;
+            for (int j = 0; j < MATRIX_SIZE; j++) {
+                if (ticTacToe[i][j] == 'X') counterOfX++;
+                if (ticTacToe[i][j] == 'O') counterOfO++;
+
+                if (counterOfX == NUMBER_OF_CELLS_ALMOST_TO_WIN_OR_LOSE || counterOfO == NUMBER_OF_CELLS_ALMOST_TO_WIN_OR_LOSE) {
+                    // Find the index of the empty cell in the horizontal line that has already two 'X'
+                    for (int z = 0; z < MATRIX_SIZE; z++) {
+                        if (ticTacToe[i][z] == ' ') {
+                            return String.format("%s %s", i + 1, z + 1);
+                        }
+                    }
+                }
+            }
+        }
         return "";
     }
 
@@ -395,9 +425,11 @@ public class Main {
                 break;
             case "medium":
                 System.out.println("Making move level \"medium\"");
-                String plannedMovement = AIPlayer.planMove(ticTacToe.getTicTacToe(), xOrO);
+                String plannedMovement = AIPlayer.planMove(ticTacToe.getTicTacToe());
                 if (plannedMovement.isEmpty()) {
                     ticTacToe.placeCell(AIPlayer.getRandomCoordinates(ticTacToe.getTicTacToe()));
+                } else {
+                    ticTacToe.placeCell(plannedMovement);
                 }
         }
     }

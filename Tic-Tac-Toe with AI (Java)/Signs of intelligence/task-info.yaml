@@ -331,5 +331,51 @@ files:
       }
     learner_created: false
 feedback_link: https://hyperskill.org/learn/step/7437#comment
-status: Unchecked
+status: Failed
+feedback:
+  message: |-
+    Wrong answer in test #138
+
+    Looks like your Medium level AI doesn&#39;t make a correct move!
+
+    Please find below the output of your program during this failed test.
+    Note that the &#39;&gt;&#39; character indicates the beginning of the input line.
+
+    ---
+
+    Input command:
+    &gt; start user medium
+    ---------
+    |       |
+    |       |
+    |       |
+    ---------
+    Enter the coordinates:
+    &gt; 2 2
+    ---------
+    |       |
+    |   X   |
+    |       |
+    ---------
+    Making move level &quot;medium&quot;
+    ---------
+    |     O |
+    |   X   |
+    |       |
+    ---------
+    Enter the coordinates:
+    &gt; 1 1
+    ---------
+    | X   O |
+    |   X   |
+    |       |
+    ---------
+    Making move level &quot;medium&quot;
+    ---------
+    | X   O |
+    |   X   |
+    | O     |
+    ---------
+    Enter the coordinates:
+  time: "Sun, 16 Jun 2024 17:07:00 UTC"
 record: -1
