@@ -97,7 +97,6 @@ class AIPlayer {
         }
 
         String verticalCoordinates = scanTicTacToeVertically(ticTacToe);
-        System.out.println(verticalCoordinates);
         if (!verticalCoordinates.isEmpty()) {
             return verticalCoordinates;
         }
@@ -115,8 +114,7 @@ class AIPlayer {
 
                 if (counterOfX == NUMBER_OF_CELLS_ALMOST_TO_WIN_OR_LOSE || counterOfO == NUMBER_OF_CELLS_ALMOST_TO_WIN_OR_LOSE) {
                     for (int z = 0; z < MATRIX_SIZE; z++) {
-                        if (ticTacToe[i][z] == ' ') {
-                            System.out.println(i + " " + z);
+                        if (ticTacToe[z][i] == ' ') {
                             return String.format("%s %s", z + 1, i + 1);
                         }
                     }
