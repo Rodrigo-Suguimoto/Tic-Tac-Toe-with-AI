@@ -92,6 +92,9 @@ class AIPlayer {
     public static String planMove(char[][] ticTacToe) {
         /* I've noticed that the algorithm is not prioritizing victory. He simply plays the first move that occupies
         the first cell on a horizontal, vertical or diagonal line that has already two of the same.
+
+        Maybe I won't need to refactor the code to analyse by Lists. I can call the methods below passing the piece as
+        an argument and find the coordinate of each one for each method. ChatGPT helped me to figure it out.
          */
 
         String horizontalCoordinates = scanTicTacToeHorizontally(ticTacToe);
