@@ -165,13 +165,11 @@ class AIPlayer {
                 {2, 0}
         };
 
-        System.out.printf("Run first diagonal for player %s\n", player);
         String firstDiagonalCoordinates = diagonalCheck(firstDiagonal, ticTacToe, player);
         if (!firstDiagonalCoordinates.isEmpty()) {
             return firstDiagonalCoordinates;
         }
 
-        System.out.printf("Run second diagonal for player %s\n", player);
         String secondDiagonalCoordinates = diagonalCheck(secondDiagonal, ticTacToe, player);
         if (!secondDiagonalCoordinates.isEmpty()) {
             return secondDiagonalCoordinates;
@@ -188,7 +186,6 @@ class AIPlayer {
             if (counter == NUMBER_OF_CELLS_ALMOST_TO_WIN_OR_LOSE) {
                 // Find the index of the empty cell in the diagonal line that has already two 'X' or 'O'
                 for (int z = 0; z < MATRIX_SIZE; z++) {
-                    System.out.printf("Player: %s. Coordinate1: %d, Coordinate2: %d\n", player, coordinate[0], coordinate[1]);
                     if (ticTacToe[coordinate[0]][coordinate[1]] == ' ') {
                         return String.format("%s %s", coordinate[0] + 1, coordinate[1] + 1);
                     }
