@@ -89,25 +89,26 @@ class AIPlayer {
         return String.format("%s %s", randomCoordinates[0], randomCoordinates[1]);
     }
 
-    public static String planMove(char[][] ticTacToe) {
-        /* I've noticed that the algorithm is not prioritizing victory. He simply plays the first move that occupies
-        the first cell on a horizontal, vertical or diagonal line that has already two of the same.
+    public static String planMove(char[][] ticTacToe, char player) {
+        char oppositePlayer = player == 'X' ? 'O' : 'X';
 
-        Maybe I won't need to refactor the code to analyse by Lists. I can call the methods below passing the piece as
-        an argument and find the coordinate of each one for each method. ChatGPT helped me to figure it out.
-         */
-
-        String horizontalCoordinates = scanTicTacToeHorizontally(ticTacToe);
+        String horizontalCoordinates = scanTicTacToeHorizontally(ticTacToe, player).isEmpty()
+                ? scanTicTacToeHorizontally(ticTacToe, oppositePlayer)
+                : scanTicTacToeHorizontally(ticTacToe, player);
         if (!horizontalCoordinates.isEmpty()) {
             return horizontalCoordinates;
         }
 
-        String verticalCoordinates = scanTicTacToeVertically(ticTacToe);
+        String verticalCoordinates = scanTicTacToeVertically(ticTacToe, player).isEmpty()
+                ? scanTicTacToeVertically(ticTacToe, oppositePlayer)
+                : scanTicTacToeVertically(ticTacToe, player);
         if (!verticalCoordinates.isEmpty()) {
             return verticalCoordinates;
         }
 
-        String diagonalCoordinates = scanTicTacToeDiagonally(ticTacToe);
+        String diagonalCoordinates = scanTicTacToeDiagonally(ticTacToe, player).isEmpty()
+                ? scanTicTacToeDiagonally(ticTacToe, oppositePlayer)
+                : scanTicTacToeDiagonally(ticTacToe, player);
         if (!diagonalCoordinates.isEmpty()) {
             return diagonalCoordinates;
         }
@@ -115,15 +116,12 @@ class AIPlayer {
         return "";
     }
 
-    private static String scanTicTacToeVertically(char[][] ticTacToe) {
+    private static String scanTicTacToeVertically(char[][] ticTacToe, char player) {
         for (int i = 0; i < MATRIX_SIZE; i++) {
-            int counterOfX = 0;
-            int counterOfO = 0;
+            int counter = 0;
             for (int j = 0; j < MATRIX_SIZE; j++) {
-                if (ticTacToe[j][i] == 'X') counterOfX++;
-                if (ticTacToe[j][i] == 'O') counterOfO++;
-
-                if (counterOfX == NUMBER_OF_CELLS_ALMOST_TO_WIN_OR_LOSE || counterOfO == NUMBER_OF_CELLS_ALMOST_TO_WIN_OR_LOSE) {
+                if (ticTacToe[j][i] == player) counter++;
+                if (counter == NUMBER_OF_CELLS_ALMOST_TO_WIN_OR_LOSE) {
                     // Find the index of the empty cell in the vertical line that has already two 'X' or 'O'
                     for (int z = 0; z < MATRIX_SIZE; z++) {
                         if (ticTacToe[z][i] == ' ') {
@@ -131,22 +129,17 @@ class AIPlayer {
                         }
                     }
                 }
-
             }
         }
-
         return "";
     }
 
-    private static String scanTicTacToeHorizontally(char[][] ticTacToe) {
+    private static String scanTicTacToeHorizontally(char[][] ticTacToe, char player) {
         for (int i = 0; i < MATRIX_SIZE; i++) {
-            int counterOfX = 0;
-            int counterOfO = 0;
+            int counter = 0;
             for (int j = 0; j < MATRIX_SIZE; j++) {
-                if (ticTacToe[i][j] == 'X') counterOfX++;
-                if (ticTacToe[i][j] == 'O') counterOfO++;
-
-                if (counterOfX == NUMBER_OF_CELLS_ALMOST_TO_WIN_OR_LOSE || counterOfO == NUMBER_OF_CELLS_ALMOST_TO_WIN_OR_LOSE) {
+                if (ticTacToe[i][j] == player) counter++;
+                if (counter == NUMBER_OF_CELLS_ALMOST_TO_WIN_OR_LOSE) {
                     // Find the index of the empty cell in the horizontal line that has already two 'X' or 'O'
                     for (int z = 0; z < MATRIX_SIZE; z++) {
                         if (ticTacToe[i][z] == ' ') {
@@ -159,25 +152,38 @@ class AIPlayer {
         return "";
     }
 
-    private static String scanTicTacToeDiagonally(char[][] ticTacToe) {
+    private static String scanTicTacToeDiagonally(char[][] ticTacToe, char player) {
         int[][] firstDiagonal = {
                 {0, 0},
                 {1, 1},
                 {2, 2}
         };
 
-        String firstDiagonalCoordinates = diagonalCheck(firstDiagonal, ticTacToe);
-        return firstDiagonalCoordinates.isEmpty() ? "" : firstDiagonalCoordinates;
+        int[][] secondDiagonal = {
+                {0, 2},
+                {1, 1},
+                {2, 0}
+        };
+
+        String firstDiagonalCoordinates = diagonalCheck(firstDiagonal, ticTacToe, player);
+        if (!firstDiagonalCoordinates.isEmpty()) {
+            return firstDiagonalCoordinates;
+        }
+
+        String secondDiagonalCoordinates = diagonalCheck(secondDiagonal, ticTacToe, player);
+        if (!secondDiagonalCoordinates.isEmpty()) {
+            return secondDiagonalCoordinates;
+        }
+
+        return "";
     }
 
-    private static String diagonalCheck(int[][] diagonalCoordinates, char[][] ticTacToe) {
-        int counterOfX = 0;
-        int counterOfO = 0;
+    private static String diagonalCheck(int[][] diagonalCoordinates, char[][] ticTacToe, char player) {
+        int counter = 0;
         for (int[] coordinate : diagonalCoordinates) {
-            if (ticTacToe[coordinate[0]][coordinate[1]] == 'X') counterOfX++;
-            if (ticTacToe[coordinate[0]][coordinate[1]] == 'O') counterOfO++;
+            if (ticTacToe[coordinate[0]][coordinate[1]] == player) counter++;
 
-            if (counterOfX == NUMBER_OF_CELLS_ALMOST_TO_WIN_OR_LOSE || counterOfO == NUMBER_OF_CELLS_ALMOST_TO_WIN_OR_LOSE) {
+            if (counter == NUMBER_OF_CELLS_ALMOST_TO_WIN_OR_LOSE) {
                 // Find the index of the empty cell in the diagonal line that has already two 'X' or 'O'
                 for (int z = 0; z < MATRIX_SIZE; z++) {
                     if (ticTacToe[coordinate[0]][coordinate[1]] == ' ') {
@@ -186,7 +192,6 @@ class AIPlayer {
                 }
             }
         }
-
         return "";
     }
 
@@ -466,7 +471,7 @@ public class Main {
                 break;
             case "medium":
                 System.out.println("Making move level \"medium\"");
-                String plannedMovement = AIPlayer.planMove(ticTacToe.getTicTacToe());
+                String plannedMovement = AIPlayer.planMove(ticTacToe.getTicTacToe(), xOrO);
                 if (plannedMovement.isEmpty()) {
                     ticTacToe.placeCell(AIPlayer.getRandomCoordinates(ticTacToe.getTicTacToe()));
                 } else {
