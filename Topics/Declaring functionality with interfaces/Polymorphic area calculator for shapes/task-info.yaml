@@ -1,0 +1,70 @@
+type: code
+files:
+  - name: src/Main.java
+    visible: true
+    text: |-
+      import java.util.Scanner;
+      
+      interface Shape {
+          double calculateArea();
+      }
+      
+      class Rectangle implements Shape {
+          private double length;
+          private double width;
+      
+          public Rectangle(double length, double width) {
+              this.length = length;
+              this.width = width;
+          }
+      
+          @Override
+          public double calculateArea() {
+              // TODO: Implement area calculation for rectangle
+          }
+      }
+      
+      class Circle implements Shape {
+          private double radius;
+      
+          public Circle(double radius) {
+              this.radius = radius;
+          }
+      
+          @Override
+          public double calculateArea() {
+              // TODO: Implement area calculation for circle
+          }
+      }
+      
+      public class Main {
+          public static void main(String[] args) {
+              Scanner scanner = new Scanner(System.in);
+              String shapeType = scanner.nextLine();
+      
+              Shape shape;
+      
+              if (shapeType.equalsIgnoreCase("rectangle")) {
+                  double length = scanner.nextDouble();
+                  double width = scanner.nextDouble();
+                  shape = new Rectangle(length, width);
+              } else if (shapeType.equalsIgnoreCase("circle")) {
+                  double radius = scanner.nextDouble();
+                  shape = new Circle(radius);
+              } else {
+                  System.out.println("Invalid shape type!");
+                  return;
+              }
+      
+              double area = shape.calculateArea();
+              System.out.printf("%.2f\n", area);
+          }
+      }
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/45669#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Mon, 01 Jul 2024 11:02:12 UTC"
+record: -1
+submission_language: java17

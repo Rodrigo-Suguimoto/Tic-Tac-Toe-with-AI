@@ -15,7 +15,7 @@ class GameMenu {
 
     public void processUserCommand(String userCommand) {
         String[] parameters = userCommand.split(" ");
-        final List<String> VALID_PLAYERS = Arrays.asList("user", "easy", "medium");
+        final List<String> VALID_PLAYERS = Arrays.asList("user", "easy", "medium", "hard");
 
         if (parameters[0].equals("start")) {
             if (parameters.length != 3) {
@@ -53,7 +53,9 @@ class GameMenu {
         return this.isValidCommand;
     }
 
-    public boolean isExitGame() { return this.exitGame; }
+    public boolean isExitGame() {
+        return this.exitGame;
+    }
 
     public String getXPlayer() { return this.xPlayer; }
 
@@ -180,19 +182,26 @@ class AIPlayer {
 
     private static String diagonalCheck(int[][] diagonalCoordinates, char[][] ticTacToe, char player) {
         int counter = 0;
+        int[] emptyCellCoordinates = new int[0];
+        boolean diagonalHasEmptyCell = false;
+
         for (int[] coordinate : diagonalCoordinates) {
             if (ticTacToe[coordinate[0]][coordinate[1]] == player) counter++;
-
-            if (counter == NUMBER_OF_CELLS_ALMOST_TO_WIN_OR_LOSE) {
-                // Find the index of the empty cell in the diagonal line that has already two 'X' or 'O'
-                for (int z = 0; z < MATRIX_SIZE; z++) {
-                    if (ticTacToe[coordinate[0]][coordinate[1]] == ' ') {
-                        return String.format("%s %s", coordinate[0] + 1, coordinate[1] + 1);
-                    }
-                }
+            if (ticTacToe[coordinate[0]][coordinate[1]] == ' ') {
+                emptyCellCoordinates = new int[]{coordinate[0], coordinate[1]};
+                diagonalHasEmptyCell = true;
             }
         }
+
+        if (counter == NUMBER_OF_CELLS_ALMOST_TO_WIN_OR_LOSE && diagonalHasEmptyCell) {
+            return String.format("%s %s", emptyCellCoordinates[0] + 1, emptyCellCoordinates[1] + 1);
+        }
         return "";
+    }
+
+    // Minimax algorithm that uses recursion to get the best movement
+    public static void minimax(char[][] ticTacToe, char player) {
+        ArrayList<int[]> emptyCells = findEmptyCells(ticTacToe);
     }
 
 }
@@ -477,6 +486,9 @@ public class Main {
                 } else {
                     ticTacToe.placeCell(plannedMovement);
                 }
+            case "hard":
+                System.out.println("Making move level \"hard\"");
+                AIPlayer.minimax(ticTacToe.getTicTacToe(), xOrO);
         }
     }
 
