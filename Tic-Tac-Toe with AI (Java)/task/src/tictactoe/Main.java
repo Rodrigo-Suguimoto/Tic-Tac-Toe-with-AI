@@ -64,7 +64,6 @@ class GameMenu {
 }
 
 class AIPlayer {
-
     final static int MATRIX_SIZE = 3;
     final static int NUMBER_OF_CELLS_ALMOST_TO_WIN_OR_LOSE = 2;
 
@@ -199,9 +198,19 @@ class AIPlayer {
         return "";
     }
 
+    public static String bestMove() {
+
+    }
+
     // Minimax algorithm that uses recursion to get the best movement
-    public static void minimax(char[][] ticTacToe, char player) {
-        ArrayList<int[]> emptyCells = findEmptyCells(ticTacToe);
+    public static void minimax(TicTacToe ticTacToe, char player) {
+        ArrayList<int[]> emptyCells = findEmptyCells(ticTacToe.getTicTacToe());
+        int score;
+
+        if (ticTacToe.getWinnerPlayer() == player) {
+            return
+        }
+
     }
 
 }
@@ -213,6 +222,7 @@ class TicTacToe {
     protected int coordinate2;
     private boolean isGameOver;
     private char[][] ticTacToe = new char[MATRIX_SIZE][MATRIX_SIZE];
+    private char winnerPlayer;
 
     public TicTacToe(String cells) {
         int charIndex = 0;
@@ -371,6 +381,7 @@ class TicTacToe {
 
     private void finishGame(char player) {
         System.out.printf("%s wins\n", player);
+        this.winnerPlayer = player;
         this.isGameOver = true;
     }
 
@@ -416,6 +427,10 @@ class TicTacToe {
     private boolean hasWonDiagonally(char player) {
         return (this.ticTacToe[0][0] == player & this.ticTacToe[1][1] == player & this.ticTacToe[2][2] == player) |
                 (this.ticTacToe[0][2] == player & this.ticTacToe[1][1] == player & this.ticTacToe[2][0] == player);
+    }
+
+    public char getWinnerPlayer() {
+        return this.winnerPlayer;
     }
 
 }
@@ -488,7 +503,7 @@ public class Main {
                 }
             case "hard":
                 System.out.println("Making move level \"hard\"");
-                AIPlayer.minimax(ticTacToe.getTicTacToe(), xOrO);
+                AIPlayer.minimax(ticTacToe, xOrO);
         }
     }
 
