@@ -198,19 +198,77 @@ class AIPlayer {
         return "";
     }
 
-    public static String bestMove() {
+    public static String bestMove(TicTacToe ticTacToe, char xOrO) {
+        double bestScore = Double.NEGATIVE_INFINITY;
+        char[][] board = ticTacToe.getTicTacToe();
+        String movement = "";
 
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == ' ') {
+                    board[i][j] = xOrO;
+                    double score = minimax(ticTacToe, xOrO, true);
+                    board[i][j] = ' ';
+                    if (score > bestScore) {
+                        bestScore = score;
+                        movement = String.format("%s %s", i + 1, j + 1);
+                    }
+                }
+            }
+        }
+
+        return movement;
     }
 
     // Minimax algorithm that uses recursion to get the best movement
-    public static void minimax(TicTacToe ticTacToe, char player) {
-        ArrayList<int[]> emptyCells = findEmptyCells(ticTacToe.getTicTacToe());
-        int score;
-
-        if (ticTacToe.getWinnerPlayer() == player) {
-            return
+    public static double minimax(TicTacToe ticTacToe, char xOrO, boolean isMaximizing) {
+        boolean isGameOver = ticTacToe.isGameOver();
+        double score = 0;
+        if (isGameOver) {
+            char winnerPlayer = ticTacToe.getWinnerPlayer();
+            if (winnerPlayer == xOrO) {
+                score = 10; // Win
+            } else if (winnerPlayer == ' ') { // Tie
+                score = 0;
+            } else {
+                score = -10; // Loss
+            }
+            return score;
         }
 
+        if (isMaximizing) {
+            double bestScore = Double.NEGATIVE_INFINITY;
+            char[][] board = ticTacToe.getTicTacToe();
+            char oppositePlayer = xOrO == 'X' ? 'O' : 'X';
+
+            for (int i = 0; i < board.length; i++) {
+                for (int j = 0; j < board[i].length; j++) {
+                    if (board[i][j] == ' ') {
+                        board[i][j] = xOrO;
+                        score = minimax(ticTacToe, oppositePlayer, false);
+                        board[i][j] = ' ';
+                        bestScore = Math.max(score, bestScore);
+                    }
+                }
+            }
+            return bestScore;
+        } else {
+            double bestScore = Double.POSITIVE_INFINITY;
+            char[][] board = ticTacToe.getTicTacToe();
+            char oppositePlayer = xOrO == 'X' ? 'O' : 'X';
+
+            for (int i = 0; i < board.length; i++) {
+                for (int j = 0; j < board[i].length; j++) {
+                    if (board[i][j] == ' ') {
+                        board[i][j] = xOrO;
+                        score = minimax(ticTacToe, oppositePlayer, true);
+                        board[i][j] = ' ';
+                        bestScore = Math.min(score, bestScore);
+                    }
+                }
+            }
+            return bestScore;
+        }
     }
 
 }
@@ -222,7 +280,7 @@ class TicTacToe {
     protected int coordinate2;
     private boolean isGameOver;
     private char[][] ticTacToe = new char[MATRIX_SIZE][MATRIX_SIZE];
-    private char winnerPlayer;
+    private char winnerPlayer = ' ';
 
     public TicTacToe(String cells) {
         int charIndex = 0;
@@ -503,7 +561,8 @@ public class Main {
                 }
             case "hard":
                 System.out.println("Making move level \"hard\"");
-                AIPlayer.minimax(ticTacToe, xOrO);
+                String bestMove = AIPlayer.bestMove(ticTacToe, xOrO);
+                ticTacToe.placeCell(bestMove);
         }
     }
 
