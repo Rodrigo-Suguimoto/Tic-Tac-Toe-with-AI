@@ -207,7 +207,7 @@ class AIPlayer {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j] == ' ') {
                     board[i][j] = xOrO;
-                    double score = minimax(ticTacToe, xOrO, true);
+                    double score = minimax(board, xOrO, true);
                     board[i][j] = ' ';
                     if (score > bestScore) {
                         bestScore = score;
@@ -221,7 +221,7 @@ class AIPlayer {
     }
 
     // Minimax algorithm that uses recursion to get the best movement
-    public static double minimax(TicTacToe ticTacToe, char xOrO, boolean isMaximizing) {
+    public static double minimax(char[][] board, char xOrO, boolean isMaximizing) {
         boolean isGameOver = ticTacToe.isGameOver();
         double score = 0;
         if (isGameOver) {
@@ -303,7 +303,9 @@ class TicTacToe {
         return this.isGameOver;
     }
 
-    public char[][] getTicTacToe() { return this.ticTacToe; }
+    public char[][] getTicTacToe() {
+        return this.ticTacToe;
+    }
 
     public void printTicTacToe() {
         System.out.println("---------");
