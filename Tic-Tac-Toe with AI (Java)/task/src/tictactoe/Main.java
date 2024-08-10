@@ -455,7 +455,7 @@ public class Main {
             } while (!isValidCommand);
 
             exitGame = gameMenu.isExitGame();
-            // If user inputs "exit", do nothing
+            // If user inputs "exit", finish the program
             if (!exitGame) {
                 TicTacToe ticTacToe = new TicTacToe();
                 ticTacToe.printTicTacToe();
