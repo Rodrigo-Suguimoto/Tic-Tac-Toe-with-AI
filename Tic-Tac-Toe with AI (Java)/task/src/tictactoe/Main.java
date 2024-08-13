@@ -15,7 +15,7 @@ class AIPlayer {
         for (int i = 0; i < ticTacToe.length; i++) {
             for (int j = 0; j < ticTacToe[i].length; j++) {
                 if (ticTacToe[i][j] == ' ') {
-                    emptyCells.add(new int[]{i + 1, j + 1}); // Adding 1 to adapt coordinates to the TicTacToe
+                    emptyCells.add(new int[]{i, j});
                 }
             }
         }
@@ -140,79 +140,6 @@ class AIPlayer {
         return "";
     }
 
-    public static String bestMove(TicTacToe ticTacToe, char xOrO) {
-        double bestScore = Double.NEGATIVE_INFINITY;
-        char[][] board = ticTacToe.getTicTacToe();
-        String movement = "";
-
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                if (board[i][j] == ' ') {
-                    board[i][j] = xOrO;
-                    double score = minimax(board, xOrO, true);
-                    board[i][j] = ' ';
-                    if (score > bestScore) {
-                        bestScore = score;
-                        movement = String.format("%s %s", i + 1, j + 1);
-                    }
-                }
-            }
-        }
-
-        return movement;
-    }
-
-    // Minimax algorithm that uses recursion to get the best movement
-    public static double minimax(char[][] board, char xOrO, boolean isMaximizing) {
-        boolean isGameOver = ticTacToe.isGameOver();
-        double score = 0;
-        if (isGameOver) {
-            char winnerPlayer = ticTacToe.getWinnerPlayer();
-            if (winnerPlayer == xOrO) {
-                score = 10; // Win
-            } else if (winnerPlayer == ' ') { // Tie
-                score = 0;
-            } else {
-                score = -10; // Loss
-            }
-            return score;
-        }
-
-        if (isMaximizing) {
-            double bestScore = Double.NEGATIVE_INFINITY;
-            char[][] board = ticTacToe.getTicTacToe();
-            char oppositePlayer = xOrO == 'X' ? 'O' : 'X';
-
-            for (int i = 0; i < board.length; i++) {
-                for (int j = 0; j < board[i].length; j++) {
-                    if (board[i][j] == ' ') {
-                        board[i][j] = xOrO;
-                        score = minimax(ticTacToe, oppositePlayer, false);
-                        board[i][j] = ' ';
-                        bestScore = Math.max(score, bestScore);
-                    }
-                }
-            }
-            return bestScore;
-        } else {
-            double bestScore = Double.POSITIVE_INFINITY;
-            char[][] board = ticTacToe.getTicTacToe();
-            char oppositePlayer = xOrO == 'X' ? 'O' : 'X';
-
-            for (int i = 0; i < board.length; i++) {
-                for (int j = 0; j < board[i].length; j++) {
-                    if (board[i][j] == ' ') {
-                        board[i][j] = xOrO;
-                        score = minimax(ticTacToe, oppositePlayer, true);
-                        board[i][j] = ' ';
-                        bestScore = Math.min(score, bestScore);
-                    }
-                }
-            }
-            return bestScore;
-        }
-    }
-
 }
 
 class TicTacToe {
@@ -223,17 +150,6 @@ class TicTacToe {
     private boolean isGameOver;
     private char[][] ticTacToe = new char[MATRIX_SIZE][MATRIX_SIZE];
     private char winnerPlayer = ' ';
-
-    public TicTacToe(String cells) {
-        int charIndex = 0;
-
-        for (int i = 0; i < this.ticTacToe.length; i++) {
-            for (int j = 0; j < this.ticTacToe[i].length; j++) {
-                this.ticTacToe[i][j] = cells.charAt(charIndex);
-                charIndex++;
-            }
-        }
-    }
 
     public TicTacToe() {
         for (int i = 0; i < this.ticTacToe.length; i++) {
@@ -439,81 +355,85 @@ class TicTacToe {
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Board board = new Board();
+        int[] coordinates = { 1, 2 };
+        board.placeMovement(coordinates, 'X');
 
-        boolean exitGame = false;
-        do {
-            GameMenu gameMenu = new GameMenu();
-
-            // Loop until get a valid user input
-            boolean isValidCommand = false;
-            do {
-                System.out.println("Input command:");
-                String userCommand = scanner.nextLine();
-                gameMenu.processUserCommand(userCommand);
-                isValidCommand = gameMenu.isValidCommand;
-            } while (!isValidCommand);
-
-            exitGame = gameMenu.isExitGame();
-            // If user inputs "exit", finish the program
-            if (!exitGame) {
-                TicTacToe ticTacToe = new TicTacToe();
-                ticTacToe.printTicTacToe();
-
-                boolean isGameOver = ticTacToe.isGameOver();
-                while (!isGameOver) {
-                    String xPlayer = gameMenu.getXPlayer();
-                    String oPlayer = gameMenu.getOPlayer();
-
-                    makeAMove(xPlayer, ticTacToe, 'X');
-                    isGameOver = checkIfGameIsOver(ticTacToe); // Verify if game is over
-
-                    if (!isGameOver) {
-                        makeAMove(oPlayer, ticTacToe, 'O');
-                        isGameOver = checkIfGameIsOver(ticTacToe); // Verify if game is over
-                    }
-                }
-            }
-
-        } while (!exitGame);
+//        Scanner scanner = new Scanner(System.in);
+//
+//        boolean exitGame = false;
+//        do {
+//            GameMenu gameMenu = new GameMenu();
+//
+//            // Loop until get a valid user input
+//            boolean isValidCommand = false;
+//            do {
+//                System.out.println("Input command:");
+//                String userCommand = scanner.nextLine();
+//                gameMenu.processUserCommand(userCommand);
+//                isValidCommand = gameMenu.isValidCommand;
+//            } while (!isValidCommand);
+//
+//            exitGame = gameMenu.isExitGame();
+//            // If user inputs "exit", finish the program
+//            if (!exitGame) {
+//                TicTacToe ticTacToe = new TicTacToe();
+//                ticTacToe.printTicTacToe();
+//
+//                boolean isGameOver = ticTacToe.isGameOver();
+//                while (!isGameOver) {
+//                    String xPlayer = gameMenu.getXPlayer();
+//                    String oPlayer = gameMenu.getOPlayer();
+//
+//                    makeAMove(xPlayer, ticTacToe, 'X');
+//                    isGameOver = checkIfGameIsOver(ticTacToe); // Verify if game is over
+//
+//                    if (!isGameOver) {
+//                        makeAMove(oPlayer, ticTacToe, 'O');
+//                        isGameOver = checkIfGameIsOver(ticTacToe); // Verify if game is over
+//                    }
+//                }
+//            }
+//
+//        } while (!exitGame);
 
     }
 
-    public static void makeAMove(String player, TicTacToe ticTacToe, char xOrO) {
-        Scanner scanner = new Scanner(System.in);
-
-        switch (player) {
-            case "user":
-                String isSuccessfulMove;
-                do {
-                    System.out.println("Enter the coordinates:");
-                    String coordinates = scanner.nextLine();
-                    isSuccessfulMove = ticTacToe.placeCell(coordinates);
-                } while (isSuccessfulMove.equals("UNSUCCESSFUL"));
-                break;
-            case "easy":
-                System.out.println("Making move level \"easy\"");
-                ticTacToe.placeCell(AIPlayer.getRandomCoordinates(ticTacToe.getTicTacToe()));
-                break;
-            case "medium":
-                System.out.println("Making move level \"medium\"");
-                String plannedMovement = AIPlayer.planMove(ticTacToe.getTicTacToe(), xOrO);
-                if (plannedMovement.isEmpty()) {
-                    ticTacToe.placeCell(AIPlayer.getRandomCoordinates(ticTacToe.getTicTacToe()));
-                } else {
-                    ticTacToe.placeCell(plannedMovement);
-                }
-            case "hard":
-                System.out.println("Making move level \"hard\"");
-                String bestMove = AIPlayer.bestMove(ticTacToe, xOrO);
-                ticTacToe.placeCell(bestMove);
-        }
-    }
-
-    public static boolean checkIfGameIsOver(TicTacToe ticTacToe) {
-        ticTacToe.printTicTacToe(); // Prints the TicTacToe after a successful move
-        ticTacToe.doesTheGameHaveAWinner(); // Verify whether there's a winner or it's a draw
-        return ticTacToe.isGameOver(); // Verify if game is over
-    }
+//    public static void makeAMove(String player, TicTacToe ticTacToe, char xOrO) {
+//        Scanner scanner = new Scanner(System.in);
+//
+//        switch (player) {
+//            case "user":
+//                String isSuccessfulMove;
+//                do {
+//                    System.out.println("Enter the coordinates:");
+//                    String coordinates = scanner.nextLine();
+//                    isSuccessfulMove = ticTacToe.placeCell(coordinates);
+//                } while (isSuccessfulMove.equals("UNSUCCESSFUL"));
+//                break;
+//            case "easy":
+//                System.out.println("Making move level \"easy\"");
+//                ticTacToe.placeCell(AIPlayer.getRandomCoordinates(ticTacToe.getTicTacToe()));
+//                break;
+//            case "medium":
+//                System.out.println("Making move level \"medium\"");
+//                String plannedMovement = AIPlayer.planMove(ticTacToe.getTicTacToe(), xOrO);
+//                if (plannedMovement.isEmpty()) {
+//                    ticTacToe.placeCell(AIPlayer.getRandomCoordinates(ticTacToe.getTicTacToe()));
+//                } else {
+//                    ticTacToe.placeCell(plannedMovement);
+//                }
+//            case "hard":
+//                System.out.println("Making move level \"hard\"");
+//                String bestMove = AIPlayer.bestMove(ticTacToe, xOrO);
+//                ticTacToe.placeCell(bestMove);
+//        }
+//    }
+//
+//    public static boolean checkIfGameIsOver(TicTacToe ticTacToe) {
+//        ticTacToe.printTicTacToe(); // Prints the TicTacToe after a successful move
+//        ticTacToe.doesTheGameHaveAWinner(); // Verify whether there's a winner or it's a draw
+//        return ticTacToe.isGameOver(); // Verify if game is over
+//    }
 
 }
