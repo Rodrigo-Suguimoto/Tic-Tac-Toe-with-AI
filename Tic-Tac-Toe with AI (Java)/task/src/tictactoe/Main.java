@@ -356,7 +356,7 @@ class TicTacToe {
 public class Main {
     public static void main(String[] args) {
         Board board = new Board();
-        int[] coordinates = { 1, 2 };
+        int[] coordinates = { 1, 3 };
         board.placeMovement(coordinates, 'X');
 
 //        Scanner scanner = new Scanner(System.in);
