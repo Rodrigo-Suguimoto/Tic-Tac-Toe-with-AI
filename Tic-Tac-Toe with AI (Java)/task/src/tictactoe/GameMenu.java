@@ -10,7 +10,7 @@ public class GameMenu {
     protected String oPlayer;
 
     public void processUserCommand(String userCommand) {
-        String[] parameters = userCommand.split(" ");
+        String[] parameters = userCommand.trim().split(" ");
         final List<String> VALID_PLAYERS = Arrays.asList("user", "easy", "medium", "hard");
 
         if (parameters[0].equals("start")) {

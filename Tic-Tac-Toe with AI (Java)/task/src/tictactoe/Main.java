@@ -142,298 +142,314 @@ class AIPlayer {
 
 }
 
-class TicTacToe {
-
-    final int MATRIX_SIZE = 3;
-    protected int coordinate1;
-    protected int coordinate2;
-    private boolean isGameOver;
-    private char[][] ticTacToe = new char[MATRIX_SIZE][MATRIX_SIZE];
-    private char winnerPlayer = ' ';
-
-    public TicTacToe() {
-        for (int i = 0; i < this.ticTacToe.length; i++) {
-            Arrays.fill(this.ticTacToe[i], ' ');
-        }
-    }
-
-    public boolean isGameOver() {
-        return this.isGameOver;
-    }
-
-    public char[][] getTicTacToe() {
-        return this.ticTacToe;
-    }
-
-    public void printTicTacToe() {
-        System.out.println("---------");
-        for (char[] cell : ticTacToe) {
-            System.out.printf("| %s %s %s |\n", cell[0], cell[1], cell[2]);
-        }
-        System.out.println("---------");
-
-    }
-
-    public String placeCell(String coordinates) {
-        String[] coordinatesIntoArray = coordinates.split(" ");
-        if (!areCoordinatesValidNumbers(coordinatesIntoArray)) return "UNSUCCESSFUL";
-        if (!areCoordinatesInsideValidRange()) return "UNSUCCESSFUL";
-        if (!isCellEmpty()) return "UNSUCCESSFUL";
-
-        int fixedCoordinate1 = this.coordinate1 - 1;
-        int fixedCoordinate2 = this.coordinate2 - 1;
-
-        this.ticTacToe[fixedCoordinate1][fixedCoordinate2] = isXorO();
-
-        return "SUCCESSFUL";
-    }
-
-    public boolean areCoordinatesInsideValidRange() {
-        if (this.coordinate1 < 1 | this.coordinate1 > 3 | this.coordinate2 < 1 | this.coordinate2 > 3) {
-            System.out.println("Coordinates should be from 1 to 3!");
-            return false;
-        }
-
-        return true;
-    }
-
-    private boolean isCellEmpty() {
-        int fixedCoordinate1 = this.coordinate1 - 1;
-        int fixedCoordinate2 = this.coordinate2 - 1;
-
-        if (this.ticTacToe[fixedCoordinate1][fixedCoordinate2] == ' ') {
-            return true;
-        }
-
-        System.out.println("This cell is occupied! Choose another one!");
-        return false;
-    }
-
-    protected char isXorO() {
-        int numberOfX = 0;
-        int numberOfO = 0;
-
-        for (int i = 0; i < this.ticTacToe.length; i++) {
-            for (int j = 0; j < this.ticTacToe[i].length; j++) {
-                if (this.ticTacToe[i][j] == 'X') {
-                    numberOfX++;
-                }
-
-                if (this.ticTacToe[i][j] == 'O') {
-                    numberOfO++;
-                }
-            }
-        }
-
-        if (numberOfX == numberOfO) {
-            return 'X';
-        }
-
-        return 'O';
-    }
-
-    private boolean areCoordinatesValidNumbers(String[] coordinates) {
-        try {
-            this.coordinate1 = Integer.parseInt(coordinates[0]);
-            this.coordinate2 = Integer.parseInt(coordinates[1]);
-        } catch (NumberFormatException e) {
-            System.out.println("You should enter numbers!");
-            return false;
-        }
-        return true;
-    }
-
-    protected boolean doesTheGameHaveAWinner() {
-        if (hasWonAcross('X')) {
-            finishGame('X');
-            return true;
-        }
-
-        if (hasWonAcross('O')) {
-            finishGame('O');
-            return true;
-        }
-
-        if (hasWonUp('X')) {
-            finishGame('X');
-            return true;
-        }
-
-        if (hasWonUp('O')) {
-            finishGame('O');
-            return true;
-        }
-
-        if (hasWonDiagonally('X')) {
-            finishGame('X');
-            return true;
-        }
-
-        if (hasWonDiagonally('O')) {
-            finishGame('O');
-            return true;
-        }
-
-        if (isDraw()) {
-            finishGame();
-            return true;
-        }
-
-        return false;
-    }
-
-    protected boolean isDraw() {
-        int MAXIMUM_NUMBER_OF_CELLS = 9;
-        int counter = 0;
-
-        for (int i = 0; i < this.ticTacToe.length; i++) {
-            for (int j = 0; j < this.ticTacToe[i].length; j++) {
-                if (this.ticTacToe[i][j] != ' ') {
-                    counter++;
-                }
-            }
-        }
-
-        return counter == MAXIMUM_NUMBER_OF_CELLS;
-    }
-
-    private void finishGame(char player) {
-        System.out.printf("%s wins\n", player);
-        this.winnerPlayer = player;
-        this.isGameOver = true;
-    }
-
-    private void finishGame() {
-        System.out.println("Draw");
-        this.isGameOver = true;
-    }
-
-    private boolean hasWonAcross(char player) {
-        int repeatedMovements = 0;
-        final int REPEATED_MOVEMENTS_TO_WIN = 3;
-
-        for (int i = 0; i < this.ticTacToe.length; i++) {
-            repeatedMovements = 0;
-            for (int j = 0; j < this.ticTacToe[i].length; j++) {
-                if (this.ticTacToe[i][j] == player) repeatedMovements++;
-                if (repeatedMovements == REPEATED_MOVEMENTS_TO_WIN) return true;
-            }
-        }
-
-        return false;
-    }
-
-    private boolean hasWonUp(char player) {
-        final int REPEATED_MOVEMENTS_TO_WIN = 3;
-        final int MATRIX_SIZE = 3;
-
-        int repeat = 0;
-        int j = 0;
-        while (repeat < MATRIX_SIZE) {
-            int repeatedMovements = 0;
-            for (int i = 0; i < MATRIX_SIZE; i++) {
-                if (this.ticTacToe[i][j] == player) repeatedMovements++;
-            }
-            if (repeatedMovements == REPEATED_MOVEMENTS_TO_WIN) return true;
-            j++;
-            repeat++;
-        }
-
-        return false;
-    }
-
-    private boolean hasWonDiagonally(char player) {
-        return (this.ticTacToe[0][0] == player & this.ticTacToe[1][1] == player & this.ticTacToe[2][2] == player) |
-                (this.ticTacToe[0][2] == player & this.ticTacToe[1][1] == player & this.ticTacToe[2][0] == player);
-    }
-
-    public char getWinnerPlayer() {
-        return this.winnerPlayer;
-    }
-
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Board board = new Board();
-        int[] coordinates = { 1, 3 };
-        board.placeMovement(coordinates, 'X');
-
-//        Scanner scanner = new Scanner(System.in);
+//class TicTacToe {
 //
-//        boolean exitGame = false;
-//        do {
-//            GameMenu gameMenu = new GameMenu();
+//    final int MATRIX_SIZE = 3;
+//    protected int coordinate1;
+//    protected int coordinate2;
+//    private boolean isGameOver;
+//    private char[][] ticTacToe = new char[MATRIX_SIZE][MATRIX_SIZE];
+//    private char winnerPlayer = ' ';
 //
-//            // Loop until get a valid user input
-//            boolean isValidCommand = false;
-//            do {
-//                System.out.println("Input command:");
-//                String userCommand = scanner.nextLine();
-//                gameMenu.processUserCommand(userCommand);
-//                isValidCommand = gameMenu.isValidCommand;
-//            } while (!isValidCommand);
-//
-//            exitGame = gameMenu.isExitGame();
-//            // If user inputs "exit", finish the program
-//            if (!exitGame) {
-//                TicTacToe ticTacToe = new TicTacToe();
-//                ticTacToe.printTicTacToe();
-//
-//                boolean isGameOver = ticTacToe.isGameOver();
-//                while (!isGameOver) {
-//                    String xPlayer = gameMenu.getXPlayer();
-//                    String oPlayer = gameMenu.getOPlayer();
-//
-//                    makeAMove(xPlayer, ticTacToe, 'X');
-//                    isGameOver = checkIfGameIsOver(ticTacToe); // Verify if game is over
-//
-//                    if (!isGameOver) {
-//                        makeAMove(oPlayer, ticTacToe, 'O');
-//                        isGameOver = checkIfGameIsOver(ticTacToe); // Verify if game is over
-//                    }
-//                }
-//            }
-//
-//        } while (!exitGame);
-
-    }
-
-//    public static void makeAMove(String player, TicTacToe ticTacToe, char xOrO) {
-//        Scanner scanner = new Scanner(System.in);
-//
-//        switch (player) {
-//            case "user":
-//                String isSuccessfulMove;
-//                do {
-//                    System.out.println("Enter the coordinates:");
-//                    String coordinates = scanner.nextLine();
-//                    isSuccessfulMove = ticTacToe.placeCell(coordinates);
-//                } while (isSuccessfulMove.equals("UNSUCCESSFUL"));
-//                break;
-//            case "easy":
-//                System.out.println("Making move level \"easy\"");
-//                ticTacToe.placeCell(AIPlayer.getRandomCoordinates(ticTacToe.getTicTacToe()));
-//                break;
-//            case "medium":
-//                System.out.println("Making move level \"medium\"");
-//                String plannedMovement = AIPlayer.planMove(ticTacToe.getTicTacToe(), xOrO);
-//                if (plannedMovement.isEmpty()) {
-//                    ticTacToe.placeCell(AIPlayer.getRandomCoordinates(ticTacToe.getTicTacToe()));
-//                } else {
-//                    ticTacToe.placeCell(plannedMovement);
-//                }
-//            case "hard":
-//                System.out.println("Making move level \"hard\"");
-//                String bestMove = AIPlayer.bestMove(ticTacToe, xOrO);
-//                ticTacToe.placeCell(bestMove);
+//    public TicTacToe() {
+//        for (int i = 0; i < this.ticTacToe.length; i++) {
+//            Arrays.fill(this.ticTacToe[i], ' ');
 //        }
 //    }
 //
-//    public static boolean checkIfGameIsOver(TicTacToe ticTacToe) {
-//        ticTacToe.printTicTacToe(); // Prints the TicTacToe after a successful move
-//        ticTacToe.doesTheGameHaveAWinner(); // Verify whether there's a winner or it's a draw
-//        return ticTacToe.isGameOver(); // Verify if game is over
+//    public boolean isGameOver() {
+//        return this.isGameOver;
 //    }
+//
+//    public char[][] getTicTacToe() {
+//        return this.ticTacToe;
+//    }
+//
+//    public void printTicTacToe() {
+//        System.out.println("---------");
+//        for (char[] cell : ticTacToe) {
+//            System.out.printf("| %s %s %s |\n", cell[0], cell[1], cell[2]);
+//        }
+//        System.out.println("---------");
+//    }
+//
+//    public String placeCell(String coordinates) {
+//        String[] coordinatesIntoArray = coordinates.split(" ");
+//        if (!areCoordinatesValidNumbers(coordinatesIntoArray)) return "UNSUCCESSFUL";
+//        if (!areCoordinatesInsideValidRange()) return "UNSUCCESSFUL";
+//        if (!isCellEmpty()) return "UNSUCCESSFUL";
+//
+//        int fixedCoordinate1 = this.coordinate1 - 1;
+//        int fixedCoordinate2 = this.coordinate2 - 1;
+//
+//        this.ticTacToe[fixedCoordinate1][fixedCoordinate2] = isXorO();
+//
+//        return "SUCCESSFUL";
+//    }
+//
+//    public boolean areCoordinatesInsideValidRange() {
+//        if (this.coordinate1 < 1 | this.coordinate1 > 3 | this.coordinate2 < 1 | this.coordinate2 > 3) {
+//            System.out.println("Coordinates should be from 1 to 3!");
+//            return false;
+//        }
+//
+//        return true;
+//    }
+//
+//    private boolean isCellEmpty() {
+//        int fixedCoordinate1 = this.coordinate1 - 1;
+//        int fixedCoordinate2 = this.coordinate2 - 1;
+//
+//        if (this.ticTacToe[fixedCoordinate1][fixedCoordinate2] == ' ') {
+//            return true;
+//        }
+//
+//        System.out.println("This cell is occupied! Choose another one!");
+//        return false;
+//    }
+//
+//    protected char isXorO() {
+//        int numberOfX = 0;
+//        int numberOfO = 0;
+//
+//        for (int i = 0; i < this.ticTacToe.length; i++) {
+//            for (int j = 0; j < this.ticTacToe[i].length; j++) {
+//                if (this.ticTacToe[i][j] == 'X') {
+//                    numberOfX++;
+//                }
+//
+//                if (this.ticTacToe[i][j] == 'O') {
+//                    numberOfO++;
+//                }
+//            }
+//        }
+//
+//        if (numberOfX == numberOfO) {
+//            return 'X';
+//        }
+//
+//        return 'O';
+//    }
+//
+//    private boolean areCoordinatesValidNumbers(String[] coordinates) {
+//        try {
+//            this.coordinate1 = Integer.parseInt(coordinates[0]);
+//            this.coordinate2 = Integer.parseInt(coordinates[1]);
+//        } catch (NumberFormatException e) {
+//            System.out.println("You should enter numbers!");
+//            return false;
+//        }
+//        return true;
+//    }
+//
+//    protected boolean doesTheGameHaveAWinner() {
+//        if (hasWonAcross('X')) {
+//            finishGame('X');
+//            return true;
+//        }
+//
+//        if (hasWonAcross('O')) {
+//            finishGame('O');
+//            return true;
+//        }
+//
+//        if (hasWonUp('X')) {
+//            finishGame('X');
+//            return true;
+//        }
+//
+//        if (hasWonUp('O')) {
+//            finishGame('O');
+//            return true;
+//        }
+//
+//        if (hasWonDiagonally('X')) {
+//            finishGame('X');
+//            return true;
+//        }
+//
+//        if (hasWonDiagonally('O')) {
+//            finishGame('O');
+//            return true;
+//        }
+//
+//        if (isDraw()) {
+//            finishGame();
+//            return true;
+//        }
+//
+//        return false;
+//    }
+//
+//    protected boolean isDraw() {
+//        int MAXIMUM_NUMBER_OF_CELLS = 9;
+//        int counter = 0;
+//
+//        for (int i = 0; i < this.ticTacToe.length; i++) {
+//            for (int j = 0; j < this.ticTacToe[i].length; j++) {
+//                if (this.ticTacToe[i][j] != ' ') {
+//                    counter++;
+//                }
+//            }
+//        }
+//
+//        return counter == MAXIMUM_NUMBER_OF_CELLS;
+//    }
+//
+//    private void finishGame(char player) {
+//        System.out.printf("%s wins\n", player);
+//        this.winnerPlayer = player;
+//        this.isGameOver = true;
+//    }
+//
+//    private void finishGame() {
+//        System.out.println("Draw");
+//        this.isGameOver = true;
+//    }
+//
+//    private boolean hasWonAcross(char player) {
+//        int repeatedMovements = 0;
+//        final int REPEATED_MOVEMENTS_TO_WIN = 3;
+//
+//        for (int i = 0; i < this.ticTacToe.length; i++) {
+//            repeatedMovements = 0;
+//            for (int j = 0; j < this.ticTacToe[i].length; j++) {
+//                if (this.ticTacToe[i][j] == player) repeatedMovements++;
+//                if (repeatedMovements == REPEATED_MOVEMENTS_TO_WIN) return true;
+//            }
+//        }
+//
+//        return false;
+//    }
+//
+//    private boolean hasWonUp(char player) {
+//        final int REPEATED_MOVEMENTS_TO_WIN = 3;
+//        final int MATRIX_SIZE = 3;
+//
+//        int repeat = 0;
+//        int j = 0;
+//        while (repeat < MATRIX_SIZE) {
+//            int repeatedMovements = 0;
+//            for (int i = 0; i < MATRIX_SIZE; i++) {
+//                if (this.ticTacToe[i][j] == player) repeatedMovements++;
+//            }
+//            if (repeatedMovements == REPEATED_MOVEMENTS_TO_WIN) return true;
+//            j++;
+//            repeat++;
+//        }
+//
+//        return false;
+//    }
+//
+//    private boolean hasWonDiagonally(char player) {
+//        return (this.ticTacToe[0][0] == player this.ticTacToe[1][1] == player & this.ticTacToe[2][2] == player) |
+//                (this.ticTacToe[0][2] == player & this.ticTacToe[1][1] == player & this.ticTacToe[2][0] == player);
+//    }
+//
+//    public char getWinnerPlayer() {
+//        return this.winnerPlayer;
+//    }
+//
+//}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        boolean exitGame = false;
+        do {
+            GameMenu gameMenu = new GameMenu();
+
+            // Loop until get a valid user input
+            boolean isValidCommand = false;
+            do {
+                System.out.println("Input command:");
+                String userCommand = scanner.nextLine();
+                gameMenu.processUserCommand(userCommand);
+                isValidCommand = gameMenu.isValidCommand;
+            } while (!isValidCommand);
+
+            exitGame = gameMenu.isExitGame();
+            // If user inputs "exit", finish the program
+            if (!exitGame) {
+                TicTacToe ticTacToe = new TicTacToe();
+                ticTacToe.printTicTacToe();
+
+                boolean isGameOver = ticTacToe.isGameOver();
+                while (!isGameOver) {
+                    String xPlayer = gameMenu.getXPlayer(); // It may be human or AI
+                    String oPlayer = gameMenu.getOPlayer(); // It may be human or AI
+
+                    makeAMove(xPlayer, ticTacToe, 'X');
+                    isGameOver = checkIfGameIsOver(ticTacToe); // Verify if game is over
+
+                    if (!isGameOver) {
+                        makeAMove(oPlayer, ticTacToe, 'O');
+                        isGameOver = checkIfGameIsOver(ticTacToe); // Verify if game is over
+                    }
+                }
+            }
+
+        } while (!exitGame);
+
+    }
+
+    public static void makeAMove(String player, TicTacToe ticTacToe, char xOrO) {
+        Scanner scanner = new Scanner(System.in);
+
+        switch (player) {
+            case "user":
+                String isSuccessfulMove;
+                do {
+                    System.out.println("Enter the coordinates:");
+                    int[] coordinates = coordinatesInZeroIndex(scanner.nextLine());
+                    isSuccessfulMove = ticTacToe.placeMovement(coordinates, xOrO);
+                } while (isSuccessfulMove.equals("UNSUCCESSFUL"));
+                break;
+            case "easy":
+                System.out.println("Making move level \"easy\"");
+                ticTacToe.placeCell(AIPlayer.getRandomCoordinates(ticTacToe.getTicTacToe()));
+                break;
+            case "medium":
+                System.out.println("Making move level \"medium\"");
+                String plannedMovement = AIPlayer.planMove(ticTacToe.getTicTacToe(), xOrO);
+                if (plannedMovement.isEmpty()) {
+                    ticTacToe.placeCell(AIPlayer.getRandomCoordinates(ticTacToe.getTicTacToe()));
+                } else {
+                    ticTacToe.placeCell(plannedMovement);
+                }
+            case "hard":
+                System.out.println("Making move level \"hard\"");
+                String bestMove = AIPlayer.bestMove(ticTacToe, xOrO);
+                ticTacToe.placeCell(bestMove);
+        }
+    }
+
+    public static boolean checkIfGameIsOver(TicTacToe ticTacToe) {
+        ticTacToe.printTicTacToe(); // Prints the TicTacToe after a successful move
+        ticTacToe.doesTheGameHaveAWinner(); // Verify whether there's a winner or it's a draw
+        return ticTacToe.isGameOver(); // Verify if game is over
+    }
+
+    public static int[] coordinatesInZeroIndex(String userCommand) {
+        String[] parameters = userCommand.trim().split(" ");
+
+        if (parameters.length != 2) {
+            System.out.println("Error: please input exactly two numbers. Example: 1 2");
+            return null;
+        }
+
+        int coordinate1 = 0;
+        int coordinate2 = 0;
+        try {
+            coordinate1 = Integer.parseInt(parameters[0]) - 1;
+            coordinate2 = Integer.parseInt(parameters[1]) - 1;
+        } catch (NumberFormatException e) {
+            System.out.println("Error: please input numbers from 1 to 3 with a space between. Example: 1 2");
+            return null;
+        }
+
+        return new int[]{coordinate1, coordinate2};
+    }
 
 }

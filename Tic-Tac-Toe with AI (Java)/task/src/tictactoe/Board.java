@@ -25,6 +25,14 @@ public class Board {
         return "SUCCESSFUL";
     }
 
+    public boolean isGameOver() {
+        return this.isGameOver;
+    }
+
+    public char getWinnerPlayer() {
+        return this.winnerPlayer;
+    }
+
     // Verifies whether the cell the player is trying to fill is empty
     private boolean isCellEmpty(int[] coordinates) {
         int coordinate1 = coordinates[0];
@@ -79,6 +87,24 @@ public class Board {
             return true;
         }
         return false;
+    }
+
+    private boolean checkIfItsDraw() {
+        int counterOfEmptyCells = 0;
+        for (int i = 0; i < this.board.length; i++) {
+            for (int j = 0; j < this.board[i].length; j++) {
+                if (this.board[i][j] == ' ') {
+                    counterOfEmptyCells++;
+                }
+            }
+        }
+        return counterOfEmptyCells == 0;
+    }
+
+    private void checkIfGameIsOver() {
+        if (hasWonInHorizontal() || hasWonInDiagonal() || hasWonInVertical() || checkIfItsDraw()) {
+            this.isGameOver = true;
+        }
     }
 
     private boolean equals3(char a, char b, char c) {
