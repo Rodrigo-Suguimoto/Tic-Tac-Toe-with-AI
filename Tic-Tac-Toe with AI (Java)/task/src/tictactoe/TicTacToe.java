@@ -20,4 +20,14 @@ public class TicTacToe {
         return this.board.placeMovement(coordinates, symbol);
     }
 
+    public void verifyIfGameIsOver() {
+        this.board.verifyIfGameIsOver();
+        char winnerPlayer = this.board.getWinnerPlayer();
+        if (winnerPlayer == ' ') {
+            System.out.println("Draw");
+        } else {
+            System.out.printf("%s wins\n", winnerPlayer);
+        }
+    }
+
 }

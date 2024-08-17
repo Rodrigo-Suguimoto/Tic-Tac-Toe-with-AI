@@ -427,7 +427,7 @@ public class Main {
 
     public static boolean checkIfGameIsOver(TicTacToe ticTacToe) {
         ticTacToe.printTicTacToe(); // Prints the TicTacToe after a successful move
-        ticTacToe.doesTheGameHaveAWinner(); // Verify whether there's a winner or it's a draw
+        ticTacToe.verifyIfGameIsOver(); // Verify whether there's a winner or it's a draw
         return ticTacToe.isGameOver(); // Verify if game is over
     }
 

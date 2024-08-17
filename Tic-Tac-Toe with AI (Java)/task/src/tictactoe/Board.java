@@ -101,7 +101,7 @@ public class Board {
         return counterOfEmptyCells == 0;
     }
 
-    private void checkIfGameIsOver() {
+    public void verifyIfGameIsOver() {
         if (hasWonInHorizontal() || hasWonInDiagonal() || hasWonInVertical() || checkIfItsDraw()) {
             this.isGameOver = true;
         }
