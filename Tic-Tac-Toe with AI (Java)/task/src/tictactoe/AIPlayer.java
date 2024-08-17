@@ -34,45 +34,32 @@ public class AIPlayer {
     public static Optional<int[]> planMove(char[][] ticTacToe, char player) {
         char oppositePlayer = player == 'X' ? 'O' : 'X';
 
-        Optional<int[]> horizontalCoordinatesMovementToWin = scanTicTacToeHorizontally(ticTacToe, player);
-        if (horizontalCoordinatesMovementToWin.isPresent()) {
-            return horizontalCoordinatesMovementToWin;
-        } else {
-            Optional<int[]> horizontalCoordinatesMovementToDefend = scanTicTacToeHorizontally(ticTacToe, oppositePlayer);
-            if (horizontalCoordinatesMovementToDefend.isPresent()) {
-                return horizontalCoordinatesMovementToDefend;
-            }
+        // For all the functions that scan the board, we first prioritize winning, then defending.
+        Optional<int[]> coordinates = scanTicTacToeHorizontally(ticTacToe, player).isPresent()
+                ? scanTicTacToeHorizontally(ticTacToe, player)
+                : scanTicTacToeHorizontally(ticTacToe, oppositePlayer);
+        if (coordinates.isPresent()) {
+            return coordinates;
         }
 
-//        String horizontalCoordinates = scanTicTacToeHorizontally(ticTacToe, player).isEmpty() // It prioritizes winning first.
-//                ? scanTicTacToeHorizontally(ticTacToe, oppositePlayer) // When there's no movement for winning, the script tries to defend to avoid losing.
-//                : scanTicTacToeHorizontally(ticTacToe, player);
-//        if (!horizontalCoordinates.isEmpty()) {
-//            return horizontalCoordinates;
-//        }
-
-        String verticalCoordinates = scanTicTacToeVertically(ticTacToe, player).isEmpty()
-                ? scanTicTacToeVertically(ticTacToe, oppositePlayer)
-                : scanTicTacToeVertically(ticTacToe, player);
-        if (!verticalCoordinates.isEmpty()) {
-            return verticalCoordinates;
+        coordinates = scanTicTacToeVertically(ticTacToe, player).isPresent()
+                ? scanTicTacToeVertically(ticTacToe, player)
+                : scanTicTacToeVertically(ticTacToe, oppositePlayer);
+        if (coordinates.isPresent()) {
+            return coordinates;
         }
 
-        String diagonalCoordinates = scanTicTacToeDiagonally(ticTacToe, player).isEmpty()
-                ? scanTicTacToeDiagonally(ticTacToe, oppositePlayer)
-                : scanTicTacToeDiagonally(ticTacToe, player);
-        if (!diagonalCoordinates.isEmpty()) {
-            return diagonalCoordinates;
+        coordinates = scanTicTacToeDiagonally(ticTacToe, player).isPresent()
+                ? scanTicTacToeDiagonally(ticTacToe, player)
+                : scanTicTacToeDiagonally(ticTacToe, oppositePlayer);
+        if (coordinates.isPresent()) {
+            return coordinates;
         }
 
-        return "";
+        return Optional.empty();
     }
 
-    private static Optional<int[]> planToWinOrDefend() {
-
-    }
-
-    private static String scanTicTacToeVertically(char[][] ticTacToe, char player) {
+    private static Optional<int[]> scanTicTacToeVertically(char[][] ticTacToe, char player) {
         for (int i = 0; i < MATRIX_SIZE; i++) {
             int counter = 0;
             for (int j = 0; j < MATRIX_SIZE; j++) {
@@ -81,13 +68,13 @@ public class AIPlayer {
                     // Find the index of the empty cell in the vertical line that has already two 'X' or 'O'
                     for (int z = 0; z < MATRIX_SIZE; z++) {
                         if (ticTacToe[z][i] == ' ') {
-                            return String.format("%s %s", z + 1, i + 1);
+                            return Optional.of(new int[]{z, i});
                         }
                     }
                 }
             }
         }
-        return "";
+        return Optional.empty();
     }
 
     private static Optional<int[]> scanTicTacToeHorizontally(char[][] ticTacToe, char player) {
@@ -108,7 +95,7 @@ public class AIPlayer {
         return Optional.empty();
     }
 
-    private static String scanTicTacToeDiagonally(char[][] ticTacToe, char player) {
+    private static Optional<int[]> scanTicTacToeDiagonally(char[][] ticTacToe, char player) {
         int[][] firstDiagonal = {
                 {0, 0},
                 {1, 1},
@@ -121,20 +108,20 @@ public class AIPlayer {
                 {2, 0}
         };
 
-        String firstDiagonalCoordinates = diagonalCheck(firstDiagonal, ticTacToe, player);
-        if (!firstDiagonalCoordinates.isEmpty()) {
+        Optional<int[]> firstDiagonalCoordinates = diagonalCheck(firstDiagonal, ticTacToe, player);
+        if (firstDiagonalCoordinates.isPresent()) {
             return firstDiagonalCoordinates;
         }
 
-        String secondDiagonalCoordinates = diagonalCheck(secondDiagonal, ticTacToe, player);
-        if (!secondDiagonalCoordinates.isEmpty()) {
+        Optional<int[]> secondDiagonalCoordinates = diagonalCheck(secondDiagonal, ticTacToe, player);
+        if (secondDiagonalCoordinates.isPresent()) {
             return secondDiagonalCoordinates;
         }
 
-        return "";
+        return Optional.empty();
     }
 
-    private static String diagonalCheck(int[][] diagonalCoordinates, char[][] ticTacToe, char player) {
+    private static Optional<int[]> diagonalCheck(int[][] diagonalCoordinates, char[][] ticTacToe, char player) {
         int counter = 0;
         int[] emptyCellCoordinates = new int[0];
         boolean diagonalHasEmptyCell = false;
@@ -148,8 +135,8 @@ public class AIPlayer {
         }
 
         if (counter == NUMBER_OF_CELLS_ALMOST_TO_WIN_OR_LOSE && diagonalHasEmptyCell) {
-            return String.format("%s %s", emptyCellCoordinates[0] + 1, emptyCellCoordinates[1] + 1);
+            return Optional.of(new int[]{emptyCellCoordinates[0], emptyCellCoordinates[1]});
         }
-        return "";
+        return Optional.empty();
     }
 }

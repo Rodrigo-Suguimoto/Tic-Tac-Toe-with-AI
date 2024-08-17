@@ -1,9 +1,6 @@
 package tictactoe;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 //class AIPlayer {
 //    final static int MATRIX_SIZE = 3;
@@ -413,12 +410,13 @@ public class Main {
                 break;
             case "medium":
                 System.out.println("Making move level \"medium\"");
-                char[][] board = ticTacToe.getBoard();
-                String plannedMovement = AIPlayer.planMove(board, xOrO);
-                if (plannedMovement.isEmpty()) {
-                    ticTacToe.placeCell(AIPlayer.getRandomCoordinates(ticTacToe.getTicTacToe()));
+                board = ticTacToe.getBoard();
+                Optional<int[]> plannedMovement = AIPlayer.planMove(board, xOrO);
+                if (plannedMovement.isPresent()) {
+                    int[] coordinates = plannedMovement.get();
+                    ticTacToe.placeMovement(coordinates, xOrO);
                 } else {
-                    ticTacToe.placeCell(plannedMovement);
+                    ticTacToe.placeMovement(AIPlayer.getRandomCoordinates(board), xOrO);
                 }
         }
     }
