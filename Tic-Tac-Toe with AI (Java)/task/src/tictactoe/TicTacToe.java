@@ -6,10 +6,14 @@ public class TicTacToe {
 
     public void printTicTacToe() {
         System.out.println("---------");
-        for (char[] cell : this.board) {
+        for (char[] cell : this.board.getBoard()) {
             System.out.printf("| %s %s %s |\n", cell[0], cell[1], cell[2]);
         }
         System.out.println("---------");
+    }
+
+    public char[][] getBoard() {
+        return this.board.getBoard();
     }
 
     public boolean isGameOver() {
@@ -22,11 +26,13 @@ public class TicTacToe {
 
     public void verifyIfGameIsOver() {
         this.board.verifyIfGameIsOver();
-        char winnerPlayer = this.board.getWinnerPlayer();
-        if (winnerPlayer == ' ') {
-            System.out.println("Draw");
-        } else {
-            System.out.printf("%s wins\n", winnerPlayer);
+        if (this.board.isGameOver()) {
+            char winnerPlayer = this.board.getWinnerPlayer(); // Only gets winner player when the game is over
+            if (winnerPlayer == ' ') { // If the game is over and winnerPlayer is still an empty char, it's a draw
+                System.out.println("Draw");
+            } else {
+                System.out.printf("%s wins\n", winnerPlayer);
+            }
         }
     }
 

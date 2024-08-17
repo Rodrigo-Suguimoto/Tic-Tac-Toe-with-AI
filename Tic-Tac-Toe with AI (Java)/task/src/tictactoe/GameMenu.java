@@ -11,14 +11,14 @@ public class GameMenu {
 
     public void processUserCommand(String userCommand) {
         String[] parameters = userCommand.trim().split(" ");
+        if (parameters.length != 3) {
+            invalidCommand();
+            return;
+        }
+
         final List<String> VALID_PLAYERS = Arrays.asList("user", "easy", "medium", "hard");
 
         if (parameters[0].equals("start")) {
-            if (parameters.length != 3) {
-                invalidCommand();
-                return;
-            }
-
             String xPlayer = parameters[1];
             String oPlayer = parameters[2];
             if (

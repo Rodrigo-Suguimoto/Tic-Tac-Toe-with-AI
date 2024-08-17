@@ -15,6 +15,10 @@ public class Board {
         }
     }
 
+    public char[][] getBoard() {
+        return this.board;
+    }
+
     public String placeMovement(int[] coordinates, char symbol) {
         if (!areCoordinatesInsideValidRange(coordinates)) return "UNSUCCESSFUL";
         if (!isCellEmpty(coordinates)) return "UNSUCCESSFUL";
