@@ -15,6 +15,21 @@ public class Board {
         }
     }
 
+    // Constructor that accepts an existing 3x3 matrix
+    public Board(char[][] board) {
+        if (board.length == MATRIX_SIZE && board[0].length == MATRIX_SIZE) {
+            // Create a deep copy of the board
+            this.board = new char[MATRIX_SIZE][MATRIX_SIZE];
+            for (int i = 0; i < this.board.length; i++) {
+                for (int j = 0; j < this.board[i].length; j++) {
+                    this.board[i][j] = board[i][j];
+                }
+            }
+        } else {
+            throw new IllegalArgumentException("The board must be a 3x3 matrix.");
+        }
+    }
+
     public char[][] getBoard() {
         return this.board;
     }
@@ -27,6 +42,12 @@ public class Board {
 
         this.board[coordinate1][coordinate2] = symbol;
         return "SUCCESSFUL";
+    }
+
+    public void removeSymbol(int[] coordinates) {
+        int coordinate1 = coordinates[0];
+        int coordinate2 = coordinates[1];
+        this.board[coordinate1][coordinate2] = ' ';
     }
 
     public boolean isGameOver() {

@@ -1,6 +1,7 @@
 package tictactoe;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.Random;
 
@@ -138,5 +139,78 @@ public class AIPlayer {
             return Optional.of(new int[]{emptyCellCoordinates[0], emptyCellCoordinates[1]});
         }
         return Optional.empty();
+    }
+
+    public static int[] bestMove(char[][] currentStateOfTheBoard, char symbol) {
+        Board boardWithPredefinedMatrix = new Board(currentStateOfTheBoard); // Creating an instance of Board to use its methods without interfering on the actual board.
+        char[][] board = boardWithPredefinedMatrix.getBoard();
+        double bestScore = Double.NEGATIVE_INFINITY;
+        int[] move = new int[0];
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == ' ') {
+                    int[] coordinates = {i, j};
+                    boardWithPredefinedMatrix.placeMovement(coordinates, symbol); // Place movement in the first empty cell found.
+
+                    double score = minimax(boardWithPredefinedMatrix, false, symbol);
+                    if (score > bestScore) {
+                        bestScore = score;
+                        move = new int[]{i, j};
+                    }
+
+                    boardWithPredefinedMatrix.removeSymbol(coordinates); // Remove the symbol to reset state of the board to the current state of the game.
+                }
+            }
+        }
+
+        return move;
+    }
+
+    private static double minimax(Board board, boolean isMaximizing, char symbol) {
+        board.verifyIfGameIsOver();
+        if (board.isGameOver()) {
+            char winnerPlayer = board.getWinnerPlayer();
+            if (winnerPlayer == ' ') {
+                return 0;
+            } else if (winnerPlayer == symbol) {
+                return 10;
+            } else {
+                return -10;
+            }
+        }
+
+        char[][] filledBoard = board.getBoard();
+        if (isMaximizing) {
+            double bestScore = Double.NEGATIVE_INFINITY;
+            for (int i = 0; i < filledBoard.length; i++) {
+                for (int j = 0; j < filledBoard[i].length; j++) {
+                    if (filledBoard[i][j] == ' ') {
+                        int[] coordinates = new int[]{i, j};
+                        board.placeMovement(coordinates, symbol);
+                        char oppositePlayer = symbol == 'X' ? 'O' : 'X';
+                        double score = minimax(board, false, oppositePlayer);
+                        board.removeSymbol(coordinates);
+                        bestScore = Math.max(score, bestScore);
+                    }
+                }
+            }
+            return bestScore;
+        } else {
+            double bestScore = Double.POSITIVE_INFINITY;
+            for (int i = 0; i < filledBoard.length; i++) {
+                for (int j = 0; j < filledBoard[i].length; j++) {
+                    if (filledBoard[i][j] == ' ') {
+                        int[] coordinates = new int[]{i, j};
+                        board.placeMovement(coordinates, symbol);
+                        char oppositePlayer = symbol == 'X' ? 'O' : 'X';
+                        double score = minimax(board, true, oppositePlayer);
+                        board.removeSymbol(coordinates);
+                        bestScore = Math.max(score, bestScore);
+                    }
+                }
+            }
+            return bestScore;
+        }
     }
 }

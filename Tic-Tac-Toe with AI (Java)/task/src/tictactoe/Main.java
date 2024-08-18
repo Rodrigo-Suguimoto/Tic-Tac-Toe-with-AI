@@ -71,6 +71,11 @@ public class Main {
                 } else {
                     ticTacToe.placeMovement(AIPlayer.getRandomCoordinates(board), xOrO);
                 }
+            case "hard":
+                System.out.println("Making move level \"hard\"");
+                board = ticTacToe.getBoard();
+                int[] bestMove = AIPlayer.bestMove(board, xOrO);
+                ticTacToe.placeMovement(bestMove, xOrO);
         }
     }
 
