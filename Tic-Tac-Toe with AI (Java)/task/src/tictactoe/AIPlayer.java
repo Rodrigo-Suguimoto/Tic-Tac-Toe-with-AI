@@ -153,7 +153,7 @@ public class AIPlayer {
                     int[] coordinates = {i, j};
                     boardWithPredefinedMatrix.placeMovement(coordinates, symbol); // Place movement in the first empty cell found.
 
-                    double score = minimax(boardWithPredefinedMatrix, false, symbol);
+                    double score = minimax(boardWithPredefinedMatrix, true, symbol);
                     if (score > bestScore) {
                         bestScore = score;
                         move = new int[]{i, j};
@@ -168,16 +168,26 @@ public class AIPlayer {
     }
 
     private static double minimax(Board board, boolean isMaximizing, char symbol) {
+        System.out.println("Minimax Call: " + (isMaximizing ? "Maximizing" : "Minimizing") + " - Symbol: " + symbol);
+        System.out.println("Board state:");
+        for (char[] row : board.getBoard()) {
+            System.out.println(Arrays.toString(row));
+        }
+
         board.verifyIfGameIsOver();
         if (board.isGameOver()) {
             char winnerPlayer = board.getWinnerPlayer();
+            double score = 0;
             if (winnerPlayer == ' ') {
-                return 0;
+                score = 0; // Score for draw
             } else if (winnerPlayer == symbol) {
-                return 10;
+                score = isMaximizing ? 10 : -10;
             } else {
-                return -10;
+                score = isMaximizing ? -10 : 10;
             }
+
+            System.out.println("Game Over - Winner: " + winnerPlayer + " - Returning Score: " + score);
+            return score;
         }
 
         char[][] filledBoard = board.getBoard();
@@ -206,11 +216,12 @@ public class AIPlayer {
                         char oppositePlayer = symbol == 'X' ? 'O' : 'X';
                         double score = minimax(board, true, oppositePlayer);
                         board.removeSymbol(coordinates);
-                        bestScore = Math.max(score, bestScore);
+                        bestScore = Math.min(score, bestScore);
                     }
                 }
             }
             return bestScore;
         }
     }
+
 }

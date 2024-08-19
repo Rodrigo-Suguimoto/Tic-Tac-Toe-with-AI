@@ -374,9 +374,6 @@ files:
           }
       }
     learner_created: false
-  - name: src/tictactoe/Player.java
-    visible: true
-    learner_created: true
   - name: src/tictactoe/GameMenu.java
     visible: true
     learner_created: true
