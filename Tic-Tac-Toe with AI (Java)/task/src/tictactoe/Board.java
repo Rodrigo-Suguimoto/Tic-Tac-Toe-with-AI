@@ -48,6 +48,11 @@ public class Board {
         int coordinate1 = coordinates[0];
         int coordinate2 = coordinates[1];
         this.board[coordinate1][coordinate2] = ' ';
+
+        System.out.println("Board after removal:");
+        for (char[] row : this.board) {
+            System.out.println(Arrays.toString(row));
+        }
     }
 
     public boolean isGameOver() {

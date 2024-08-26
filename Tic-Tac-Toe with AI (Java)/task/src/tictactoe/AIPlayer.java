@@ -144,7 +144,7 @@ public class AIPlayer {
     public static int[] bestMove(char[][] currentStateOfTheBoard, char symbol) {
         Board boardWithPredefinedMatrix = new Board(currentStateOfTheBoard); // Creating an instance of Board to use its methods without interfering on the actual board.
         char[][] board = boardWithPredefinedMatrix.getBoard();
-        double bestScore = Double.NEGATIVE_INFINITY;
+        int bestScore = Integer.MIN_VALUE;
         int[] move = new int[0];
 
         for (int i = 0; i < board.length; i++) {
@@ -153,21 +153,21 @@ public class AIPlayer {
                     int[] coordinates = {i, j};
                     boardWithPredefinedMatrix.placeMovement(coordinates, symbol); // Place movement in the first empty cell found.
 
-                    double score = minimax(boardWithPredefinedMatrix, true, symbol);
+                    int score = minimax(boardWithPredefinedMatrix, false, symbol);
+                    boardWithPredefinedMatrix.removeSymbol(coordinates); // Remove the symbol to reset state of the board to the current state of the game.
+                    System.out.println("Score from bestMove function: " + score);
                     if (score > bestScore) {
                         bestScore = score;
-                        move = new int[]{i, j};
+                        move = coordinates;
+                        System.out.println("Best Score from bestMove function: " + bestScore + ". i and j: " + i + " " + j);
                     }
-
-                    boardWithPredefinedMatrix.removeSymbol(coordinates); // Remove the symbol to reset state of the board to the current state of the game.
                 }
             }
         }
-
         return move;
     }
 
-    private static double minimax(Board board, boolean isMaximizing, char symbol) {
+    private static int minimax(Board board, boolean isMaximizing, char symbol) {
         System.out.println("Minimax Call: " + (isMaximizing ? "Maximizing" : "Minimizing") + " - Symbol: " + symbol);
         System.out.println("Board state:");
         for (char[] row : board.getBoard()) {
@@ -177,7 +177,7 @@ public class AIPlayer {
         board.verifyIfGameIsOver();
         if (board.isGameOver()) {
             char winnerPlayer = board.getWinnerPlayer();
-            double score = 0;
+            int score = 0;
             if (winnerPlayer == ' ') {
                 score = 0; // Score for draw
             } else if (winnerPlayer == symbol) {
@@ -192,31 +192,31 @@ public class AIPlayer {
 
         char[][] filledBoard = board.getBoard();
         if (isMaximizing) {
-            double bestScore = Double.NEGATIVE_INFINITY;
+            int bestScore = Integer.MIN_VALUE;
             for (int i = 0; i < filledBoard.length; i++) {
                 for (int j = 0; j < filledBoard[i].length; j++) {
                     if (filledBoard[i][j] == ' ') {
                         int[] coordinates = new int[]{i, j};
                         board.placeMovement(coordinates, symbol);
                         char oppositePlayer = symbol == 'X' ? 'O' : 'X';
-                        double score = minimax(board, false, oppositePlayer);
-                        board.removeSymbol(coordinates);
+                        int score = minimax(board, false, oppositePlayer);
                         bestScore = Math.max(score, bestScore);
+                        board.removeSymbol(coordinates);
                     }
                 }
             }
             return bestScore;
         } else {
-            double bestScore = Double.POSITIVE_INFINITY;
+            int bestScore = Integer.MAX_VALUE;
             for (int i = 0; i < filledBoard.length; i++) {
                 for (int j = 0; j < filledBoard[i].length; j++) {
                     if (filledBoard[i][j] == ' ') {
                         int[] coordinates = new int[]{i, j};
                         board.placeMovement(coordinates, symbol);
                         char oppositePlayer = symbol == 'X' ? 'O' : 'X';
-                        double score = minimax(board, true, oppositePlayer);
-                        board.removeSymbol(coordinates);
+                        int score = minimax(board, true, oppositePlayer);
                         bestScore = Math.min(score, bestScore);
+                        board.removeSymbol(coordinates);
                     }
                 }
             }

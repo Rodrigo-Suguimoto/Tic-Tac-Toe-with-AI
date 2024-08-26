@@ -11,6 +11,13 @@ public class GameMenu {
 
     public void processUserCommand(String userCommand) {
         String[] parameters = userCommand.trim().split(" ");
+        if (parameters[0].equals("exit") && parameters.length == 1) {
+            this.isValidCommand = true;
+            this.exitGame = true;
+            return;
+        }
+
+
         if (parameters.length != 3) {
             invalidCommand();
             return;
@@ -32,11 +39,6 @@ public class GameMenu {
             this.xPlayer = xPlayer;
             this.oPlayer = oPlayer;
             return;
-        }
-
-        if (parameters[0].equals("exit") && parameters.length == 1) {
-            this.isValidCommand = true;
-            this.exitGame = true;
         }
     }
 
