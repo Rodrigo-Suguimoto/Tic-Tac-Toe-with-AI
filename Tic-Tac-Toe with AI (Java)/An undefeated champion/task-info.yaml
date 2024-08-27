@@ -374,6 +374,9 @@ files:
           }
       }
     learner_created: false
+  - name: src/tictactoe/AIPlayer.java
+    visible: true
+    learner_created: true
   - name: src/tictactoe/GameMenu.java
     visible: true
     learner_created: true
@@ -381,9 +384,6 @@ files:
     visible: true
     learner_created: true
   - name: src/tictactoe/TicTacToe.java
-    visible: true
-    learner_created: true
-  - name: src/tictactoe/AIPlayer.java
     visible: true
     learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7438#comment

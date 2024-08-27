@@ -12,6 +12,10 @@ public class TicTacToe {
         System.out.println("---------");
     }
 
+    public Board getBoardClass() {
+        return this.board;
+    }
+
     public char[][] getBoard() {
         return this.board.getBoard();
     }
@@ -34,6 +38,10 @@ public class TicTacToe {
                 System.out.printf("%s wins\n", winnerPlayer);
             }
         }
+    }
+
+    public void removeSymbol(int[] coordinates) {
+        board.removeSymbol(coordinates);
     }
 
 }

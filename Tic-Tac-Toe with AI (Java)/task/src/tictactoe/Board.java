@@ -34,6 +34,10 @@ public class Board {
         return this.board;
     }
 
+    public int getBoardSize() {
+        return this.MATRIX_SIZE;
+    }
+
     public String placeMovement(int[] coordinates, char symbol) {
         if (!areCoordinatesInsideValidRange(coordinates)) return "UNSUCCESSFUL";
         if (!isCellEmpty(coordinates)) return "UNSUCCESSFUL";
@@ -48,11 +52,6 @@ public class Board {
         int coordinate1 = coordinates[0];
         int coordinate2 = coordinates[1];
         this.board[coordinate1][coordinate2] = ' ';
-
-        System.out.println("Board after removal:");
-        for (char[] row : this.board) {
-            System.out.println(Arrays.toString(row));
-        }
     }
 
     public boolean isGameOver() {
@@ -64,14 +63,14 @@ public class Board {
     }
 
     // Verifies whether the cell the player is trying to fill is empty
-    private boolean isCellEmpty(int[] coordinates) {
+    public boolean isCellEmpty(int[] coordinates) {
         int coordinate1 = coordinates[0];
         int coordinate2 = coordinates[1];
 
         if (this.board[coordinate1][coordinate2] == ' ') {
             return true;
         } else {
-            System.out.println("This cell is occupied! Choose another one!");
+//            System.out.println("This cell is occupied! Choose another one!");
             return false;
         }
     }
@@ -119,7 +118,7 @@ public class Board {
         return false;
     }
 
-    private boolean checkIfItsDraw() {
+    public boolean checkIfItsDraw() {
         int counterOfEmptyCells = 0;
         for (int i = 0; i < this.board.length; i++) {
             for (int j = 0; j < this.board[i].length; j++) {
@@ -137,7 +136,7 @@ public class Board {
         }
     }
 
-    private boolean equals3(char a, char b, char c) {
+    public boolean equals3(char a, char b, char c) {
         return a == b && b == c && a != ' ';
     }
 }

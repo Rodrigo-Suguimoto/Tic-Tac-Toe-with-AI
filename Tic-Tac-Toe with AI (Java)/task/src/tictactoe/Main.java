@@ -74,8 +74,8 @@ public class Main {
                 break;
             case "hard":
                 System.out.println("Making move level \"hard\"");
-                board = ticTacToe.getBoard();
-                int[] bestMove = AIPlayer.bestMove(board, xOrO);
+                Board boardClass = ticTacToe.getBoardClass();
+                int[] bestMove = AIPlayer.getBestMove(boardClass, xOrO);
                 ticTacToe.placeMovement(bestMove, xOrO);
                 break;
         }
