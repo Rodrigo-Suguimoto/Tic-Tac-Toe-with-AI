@@ -150,10 +150,11 @@ public class AIPlayer {
                 int[] coordinates = new int[]{row, col};
                 if (board.isCellEmpty(coordinates)) {
                     board.placeMovement(coordinates, symbol);
-                    int moveScore = minimax(board, symbol, false);
+                    int moveScore = minimax(board, symbol, true);
                     board.removeSymbol(coordinates);
                     if (moveScore > bestScore) {
                         bestMove = new int[]{row, col};
+                        System.out.println(Arrays.toString(bestMove));
                         bestScore = moveScore;
                     }
                 }
@@ -165,7 +166,6 @@ public class AIPlayer {
     private static int minimax(Board board, char symbol, boolean isMaximizer) {
         Optional<Integer> boardValue = evaluateBoard(board, symbol, isMaximizer);
         if (boardValue.isPresent()) {
-            System.out.println(boardValue.get());
             return boardValue.get();
         }
 
@@ -208,6 +208,11 @@ public class AIPlayer {
         for (int i = 0; i < ticTacToe.length; i++) {
             if (board.equals3(ticTacToe[i][0], ticTacToe[i][1], ticTacToe[i][2])) {
                 winnerPlayer = ticTacToe[i][0];
+                for (char[] row : ticTacToe) {
+                    System.out.println(Arrays.toString(row));
+                }
+                System.out.println("--- space ---");
+
                 if (winnerPlayer == symbol & isMaximizer) {
                     return Optional.of(10);
                 } else if (winnerPlayer == symbol & !isMaximizer) {
