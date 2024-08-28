@@ -74,9 +74,14 @@ public class Main {
                 break;
             case "hard":
                 System.out.println("Making move level \"hard\"");
-                Board boardClass = ticTacToe.getBoardClass();
-                int[] bestMove = AIPlayer.getBestMove(boardClass, xOrO);
-                ticTacToe.placeMovement(bestMove, xOrO);
+//                char[][] exampleBoard =
+//                        {
+//                                { 'X', 'X', 'O'},
+//                                { ' ', 'O', 'O'},
+//                                { ' ', 'X', ' '}
+//                        };
+                char oppositePlayer = xOrO == 'X' ? 'O' : 'X';
+                MiniMax minimax = new MiniMax(xOrO, oppositePlayer);
                 break;
         }
     }

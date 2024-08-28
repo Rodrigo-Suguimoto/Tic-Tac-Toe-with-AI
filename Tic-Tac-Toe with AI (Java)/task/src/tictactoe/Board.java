@@ -70,7 +70,7 @@ public class Board {
         if (this.board[coordinate1][coordinate2] == ' ') {
             return true;
         } else {
-//            System.out.println("This cell is occupied! Choose another one!");
+            System.out.println("This cell is occupied! Choose another one!");
             return false;
         }
     }
