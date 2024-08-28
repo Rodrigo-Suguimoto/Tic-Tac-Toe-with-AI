@@ -57,6 +57,40 @@ public class MiniMax {
         return bestMove;
     }
 
+    private int minimax(char[][] board, boolean isMax) {
+        int score = evaluateBoard(board);
+
+        if (score == 10 || score == -10 || !areThereAnyMovesLeft(board)) {
+            return score;
+        }
+
+        if (isMax) {
+            int bestValue = Integer.MIN_VALUE;
+            for (int row = 0; row < board.length; row++) {
+                for (int col = 0; col < board[row].length; col++) {
+                    if (board[row][col] == ' ') {
+                        board[row][col] = this.maximizerPlayer;
+                        bestValue = Math.max(bestValue, minimax(board, false));
+                        board[row][col] = ' ';
+                    }
+                }
+            }
+            return bestValue;
+        } else {
+            int bestValue = Integer.MAX_VALUE;
+            for (int row = 0; row < board.length; row++) {
+                for (int col = 0; col < board[row].length; col++) {
+                    if (board[row][col] == ' ') {
+                        board[row][col] = this.minimizerPlayer;
+                        bestValue = Math.min(bestValue, minimax(board, true));
+                        board[row][col] = ' ';
+                    }
+                }
+            }
+            return bestValue;
+        }
+    }
+
     private static boolean areThereAnyMovesLeft(char[][] board) {
         for (int row = 0; row < board.length; row++) {
             for (int col = 0; col < board[row].length; col++) {

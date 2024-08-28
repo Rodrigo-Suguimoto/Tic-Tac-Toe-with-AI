@@ -74,14 +74,12 @@ public class Main {
                 break;
             case "hard":
                 System.out.println("Making move level \"hard\"");
-//                char[][] exampleBoard =
-//                        {
-//                                { 'X', 'X', 'O'},
-//                                { ' ', 'O', 'O'},
-//                                { ' ', 'X', ' '}
-//                        };
                 char oppositePlayer = xOrO == 'X' ? 'O' : 'X';
                 MiniMax minimax = new MiniMax(xOrO, oppositePlayer);
+                board = ticTacToe.getBoard();
+
+                int[] bestMove = minimax.findBestMove(board);
+                ticTacToe.placeMovement(bestMove, xOrO);
                 break;
         }
     }
