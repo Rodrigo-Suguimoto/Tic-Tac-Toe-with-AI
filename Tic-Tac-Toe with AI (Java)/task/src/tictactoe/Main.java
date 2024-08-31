@@ -50,6 +50,7 @@ public class Main {
         switch (player) {
             case "user":
                 String isSuccessfulMove;
+                // Loop until user writes proper coordinates
                 do {
                     System.out.println("Enter the coordinates:");
                     int[] coordinates = coordinatesInZeroIndex(scanner.nextLine());
