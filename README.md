@@ -7,6 +7,8 @@ You'll be able to play against a human or AI with three difficulty modes: easy, 
 2. The medium AI is a little bit smarter. He can defend himself and make the movement to win when he has the chance;
 3. The hard AI won't let you win. You'll only lose or draw. I've implemented the minimax algorithm which is a pretty cool algorithm used in Game Development. It recursively evaluates the moves and counter-moves and selects the best possible move.
 
+![](https://github.com/Rodrigo-Suguimoto/Tic-Tac-Toe-with-AI/blob/main/tictactoe-demo.gif)
+
 ## Commands to start and stop the game
 To start the game you need to type something like: `start user hard` which means that a human will play as 'X' and the hard AI will play as 'O'.
 - The first player after "start" will always be 'X' and the second one will always be 'O'. So if you type `start hard user`, the hard AI will start the game;
