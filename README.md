@@ -1,6 +1,6 @@
 # Tic Tac Toe with AI
 
-I've created this game with Java as part of the [Hyperskill's curriculum](https://hyperskill.org/projects/81).
+I've created this Tic Tac Toe game with Java as part of the [Hyperskill's curriculum](https://hyperskill.org/projects/81).
 You'll be able to play against a human or AI with three difficulty modes: easy, medium and hard.
 
 1. The easy AI will only play random moves;
