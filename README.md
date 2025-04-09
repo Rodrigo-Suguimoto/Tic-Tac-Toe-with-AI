@@ -1,19 +1,19 @@
 # Tic Tac Toe with AI
 
-I've created this Tic Tac Toe game with Java as part of the [Hyperskill's curriculum](https://hyperskill.org/projects/81).
-You'll be able to play against a human or AI with three difficulty modes: easy, medium and hard.
+Play Tic-Tac-Toe against a human opponent or challenge the AI in three difficulty modes: easy, medium, and hard.
 
-1. The easy AI will only play random moves;
-2. The medium AI is a little bit smarter. He can defend himself and make the movement to win when he has the chance;
-3. The hard AI won't let you win. You'll only lose or draw. I've implemented the minimax algorithm which is a pretty cool algorithm used in Game Development. It recursively evaluates the moves and counter-moves and selects the best possible move.
+1. The easy AI makes only random moves.
+2. The medium AI is more sophisticated, capable of defending against threats and seizing opportunities to win.
+3. The hard AI is unbeatable—you can only lose or draw. It uses the `minimax algorithm`, a powerful technique in game development that recursively evaluates all possible moves and counter-moves to select the optimal choice.
+
+## Starting the game
+To start the game, run `Main.java` located at `Tic-Tac-Toe-with-AI/Tic-Tac-Toe with AI (Java)/task/src/tictactoe/Main.java`. When prompted, enter a command like `start user hard`, which will let you play as X against a hard AI opponent as O.
+
+- Player X always goes first after the "start" command, followed by player O. For example, typing `start hard user` means the hard AI plays first. You can choose `easy`, `medium`, or `hard` for the AI difficulty.
+- For human vs. human gameplay, enter `start user user`. You can even watch AI opponents compete against each other—try `start medium hard`.
+- To exit the program, type "exit".
+
+## Playing the game
+To make a move, enter coordinates like 1 1, which places your mark ('X' or 'O') in the first row and first column. The row and column numbers must be separated by a space.
 
 ![](https://github.com/Rodrigo-Suguimoto/Tic-Tac-Toe-with-AI/blob/main/tictactoe-demo.gif)
-
-## Commands to start and stop the game
-To start the game you need to type something like: `start user hard` which means that a human will play as 'X' and the hard AI will play as 'O'.
-- The first player after "start" will always be 'X' and the second one will always be 'O'. So if you type `start hard user`, the hard AI will start the game;
-- You can also play human vs human, you just need to type `start user user`;
-- If you want to stop the program, type "exit".
-
-## Commands to place movements
-To place movements, you'll need to write the coordinates, such as `1 1` which will place your mark ('X' or 'O') in the first row of the first column. Note that the numbers are separated by a space.
